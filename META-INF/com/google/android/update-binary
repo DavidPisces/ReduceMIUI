@@ -40,6 +40,7 @@ MIN_VER=`grep_prop minMagisk $INSTALLER/module.prop`
 MODID=`grep_prop id $INSTALLER/module.prop`
 MODPATH=$MOUNTPATH/$MODID
 print_modname
+costom_setttings
 request_zip_size_check "$ZIP"
 mount_magisk_img
 rm -rf $MODPATH 2>/dev/null
