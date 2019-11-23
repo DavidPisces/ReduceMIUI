@@ -3,4 +3,4 @@ name=MIUI 精简计划
 versionCode=1
 minMagisk=17000
 author=雄氏老方
-description=保留完整功能的前提下尽可能精简系统服务，并调整Zram使用(激进) 精简列表更新日期：11.8
+description=保留完整功能的前提下尽可能精简系统服务 精简列表更新日期：
