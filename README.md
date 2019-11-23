@@ -108,5 +108,5 @@
 > /system/priv-app/dpmserviceapp
 > /system/priv-app/EmergencyInfo
 > /system/priv-app/ExternalStorageProvide
->/system/data-app
->/vendor/date-app
+> /system/data-app
+> /vendor/date-app
