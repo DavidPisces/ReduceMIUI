@@ -107,6 +107,9 @@
 > /system/priv-app/MiuiFreeformService
 > /system/priv-app/dpmserviceapp
 > /system/priv-app/EmergencyInfo
-> /system/priv-app/ExternalStorageProvide
+>
+> /system/priv-app/ExternalStorageProvider
+>
 > /system/data-app
+>
 > /vendor/date-app
