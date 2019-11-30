@@ -2,7 +2,7 @@
 
 ##### 这是一个Magisk模块，适用于国内版MIUI  
 
-#### 没有机型限制,需要MIUI10以上
+#### 没有版本机型限制
 
 ######  特点：在不影响正常功能情况下尽可能精简系统进程
 
@@ -27,9 +27,23 @@
 
   * 模块的版本号是由config.sh自动写入，无需在module.prop重复手动加入
 
-  * 模块默认调整Zram上限是3001，有需要请自行调整mcd_default.conf(个人不建议在大内存手机上使用)
+  * 模块默认调整Zram上限是3001，有需要请自行调整mcd_default.conf(个人不建议在大内存手机上使用
 
-    
+
+
+##### 更新日志
+
+> 11.29 (2.0.1)
+>
+> 1.增加自选模式，采用shell冻结方式，使用service.sh开机自动执行冻结
+>
+> 2.修复调用文件管理不显示内置存储
+>
+> 3.调整脚本的写入顺序
+>
+> 4.精简列表调整
+>
+> 5.默认关闭Zram调整
 
 ##### 参数设置
 
@@ -47,13 +61,19 @@
 
 > enable_zram
 >
-> Zram调整配置，默认启用，0为关闭，1为开启
+> Zram调整配置，默认关闭，0为关闭，1为开启
 
 
 
 > enable_prefetch
 >
 > 预读调整为128kb，默认启用，0为关闭，1为开启
+
+
+
+> enable_mode2
+>
+> 自选模式，使用shell冻结，使用音量键自选，0为关闭，1为开启
 
 ##### 精简列表
 
@@ -103,7 +123,7 @@
 >
 > /system/app/PrintSpooler
 >
-> /syatem/app/PrintRecommendationService
+> /system/app/PrintRecommendationService
 >
 > /system/app/SeempService
 >
@@ -156,8 +176,16 @@
 >
 > /system/priv-app/EmergencyInfo
 >
-> /system/priv-app/ExternalStorageProvider
->
 > /system/data-app
 >
-> /vendor/date-app
+> /vendor/data-app
+
+##### 自选冻结列表
+
+> 小米浏览器
+>
+> 内容中心
+>
+> 小米音乐
+>
+> 小米视频
