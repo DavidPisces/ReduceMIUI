@@ -58,7 +58,7 @@ if [ $enable_mode2 = "1" ]; then
 	    ui_print "   [小米音乐]未冻结。"
     fi
 	#小米视频
-	ui_print "- 请按音量键选择是否冻结[浏小米视频] -"
+	ui_print "- 请按音量键选择是否冻结[小米视频] -"
     ui_print "   [音量+]：冻结"
     ui_print "   [音量-]：放弃"
 	if $FUNCTION; then
