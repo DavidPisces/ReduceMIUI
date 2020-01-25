@@ -1,132 +1,173 @@
 #!/sbin/sh
-TMPDIR=/dev/tmp
-INSTALLER=$TMPDIR/install
-MOUNTPATH=$TMPDIR/magisk_img
+
+#################
+# Initialization
+#################
+
 umask 022
+
+# Global vars
+TMPDIR=/dev/tmp
+PERSISTDIR=/sbin/.magisk/mirror/persist
+
 rm -rf $TMPDIR 2>/dev/null
-mkdir -p $INSTALLER
+mkdir -p $TMPDIR
+
+# echo before loading util_functions
 ui_print() { echo "$1"; }
+
 require_new_magisk() {
   ui_print "*******************************"
-  ui_print " 请安装 Magisk v17.0+ ! "
+  ui_print " Please install Magisk v19.0+! "
   ui_print "*******************************"
   exit 1
 }
-OUTFD=$2
-ZIP=$3
-mount /data 2>/dev/null
-if [ -f /data/adb/magisk/util_functions.sh ]; then
-  . /data/adb/magisk/util_functions.sh
-elif [ -f /data/magisk/util_functions.sh ]; then
-  NVBASE=/data
-  . /data/magisk/util_functions.sh
-else
-  require_new_magisk
-fi
-$BOOTMODE && IMG=$NVBASE/magisk_merge.img
 
+is_legacy_script() {
+  unzip -l "$ZIPFILE" install.sh | grep -q install.sh
+  return $?
+}
+
+print_modname() {
+  local len
+  len=`echo -n $MODNAME | wc -c`
+  len=$((len + 2))
+  local pounds=`printf "%${len}s" | tr ' ' '*'`
+  ui_print "$pounds"
+  ui_print " $MODNAME "
+  ui_print "$pounds"
+  ui_print "*******************"
+  ui_print " Powered by Magisk "
+  ui_print "*******************"
+}
+
+##############
+# Environment
+##############
+
+OUTFD=$2
+ZIPFILE=$3
+
+mount /data 2>/dev/null
+
+# Load utility functions
+[ -f /data/adb/magisk/util_functions.sh ] || require_new_magisk
+. /data/adb/magisk/util_functions.sh
+[ $MAGISK_VER_CODE -gt 18100 ] || require_new_magisk
+
+# Preperation for flashable zips
 setup_flashable
 
+# Mount partitions
 mount_partitions
 
+# Detect version and architecture
 api_level_arch_detect
 
+# Setup busybox and binaries
 $BOOTMODE && boot_actions || recovery_actions
-unzip -o "$ZIP" module.prop config.sh 'common/*' -d $INSTALLER >&2
-[ ! -f $INSTALLER/config.sh ] && abort "! 从 zip 中提取文件失败!"
-. $INSTALLER/config.sh
-MIN_VER=`grep_prop minMagisk $INSTALLER/module.prop`
-[ ! -z $MAGISK_VER_CODE -a $MAGISK_VER_CODE -ge $MIN_VER ] || require_new_magisk
-MODID=`grep_prop id $INSTALLER/module.prop`
-MODPATH=$MOUNTPATH/$MODID
-print_modname
-keytest() {
-ui_print "- 音量键测试 -"
-ui_print "   请按下 [音量+] 键："
-ui_print "   无反应或传统模式无法正确安装时，请触摸一下屏幕后继续"
-(/system/bin/getevent -lc 1 2>&1 | /system/bin/grep VOLUME | /system/bin/grep " DOWN" > $INSTALLER/events) || return 1
-return 0
-}
-chooseport() {
-#note from chainfire @xda-developers: getevent behaves weird when piped, and busybox grep likes that even less than toolbox/toybox grep
-while (true); do
-	/system/bin/getevent -lc 1 2>&1 | /system/bin/grep VOLUME | /system/bin/grep " DOWN" > $INSTALLER/events
-	if (`cat $INSTALLER/events 2>/dev/null | /system/bin/grep VOLUME >/dev/null`); then
-		break
-	fi
-done
-if (`cat $INSTALLER/events 2>/dev/null | /system/bin/grep VOLUMEUP >/dev/null`); then
-	return 0
-else
-	return 1
-fi
-}
-chooseportold() {
-# Calling it first time detects previous input. Calling it second time will do what we want
-$KEYCHECK
-$KEYCHECK
-SEL=$?
-if [ "$1" == "UP" ]; then
-	UP=$SEL
-elif [ "$1" == "DOWN" ]; then
-	DOWN=$SEL
-elif [ $SEL -eq $UP ]; then
-	return 0
-elif [ $SEL -eq $DOWN ]; then
-	return 1
-else
-	abort "   未检测到音量键!"
-fi
-}
-verformat() {
-vertmp=$(printf %02d `echo ${1#V} | cut -f 1 -d . `)$(printf %02d `echo $1 | cut -f 2 -d . `)$(printf %02d `echo $1 | cut -f 3 -d . `)$(printf %02d `echo $1 | cut -f 4 -d . ` 2>/dev/null)
-echo "$vertmp"
-}
-getfilever() {
-[ `verformat $miuiver` -ge `verformat $1` ] && [ `verformat $miuiver` -le `verformat $2` ] && return 0 || return 1
-}
-# 测试音量键
-if keytest; then
-	FUNCTION=chooseport
-	ui_print "*******************************"
-else
-	FUNCTION=chooseportold
-	ui_print "*******************************"
-	ui_print "- 检测到遗留设备！使用旧的 keycheck 方案 -"
-	ui_print "- 进行音量键录入 -"
-	ui_print "   录入：请按下 [音量+] 键："
-	$FUNCTION "UP"
-	ui_print "   已录入 [音量+] 键。"
-	ui_print "   录入：请按下 [音量-] 键："
-	$FUNCTION "DOWN"
-	ui_print "   已录入 [音量-] 键。"
-ui_print "*******************************"
-fi
-costom_delete
-costom_setttings
-request_zip_size_check "$ZIP"
-mount_magisk_img
+
+##############
+# Preparation
+##############
+
+# Extract prop file
+unzip -o "$ZIPFILE" module.prop -d $TMPDIR >&2
+[ ! -f $TMPDIR/module.prop ] && abort "! Unable to extract zip file!"
+
+$BOOTMODE && MODDIRNAME=modules_update || MODDIRNAME=modules
+MODULEROOT=$NVBASE/$MODDIRNAME
+MODID=`grep_prop id $TMPDIR/module.prop`
+MODPATH=$MODULEROOT/$MODID
+MODNAME=`grep_prop name $TMPDIR/module.prop`
+
+# Create mod paths
 rm -rf $MODPATH 2>/dev/null
 mkdir -p $MODPATH
-ui_print "- 正在解压模块文件"
-unzip -o "$ZIP" 'system/*' -d $MODPATH >&2
-rm -f $MODPATH/system/placeholder 2>/dev/null
+
+##########
+# Install
+##########
+
+if is_legacy_script; then
+  unzip -oj "$ZIPFILE" module.prop install.sh uninstall.sh 'common/*' -d $TMPDIR >&2
+
+  # Load install script
+  . $TMPDIR/install.sh
+
+  # Callbacks
+  print_modname
+  on_install
+
+  # Custom uninstaller
+  [ -f $TMPDIR/uninstall.sh ] && cp -af $TMPDIR/uninstall.sh $MODPATH/uninstall.sh
+
+  # Skip mount
+  $SKIPMOUNT && touch $MODPATH/skip_mount
+
+  # prop file
+  $PROPFILE && cp -af $TMPDIR/system.prop $MODPATH/system.prop
+
+  # Module info
+  cp -af $TMPDIR/module.prop $MODPATH/module.prop
+
+  # post-fs-data scripts
+  $POSTFSDATA && cp -af $TMPDIR/post-fs-data.sh $MODPATH/post-fs-data.sh
+
+  # service scripts
+  $LATESTARTSERVICE && cp -af $TMPDIR/service.sh $MODPATH/service.sh
+
+  ui_print "- Setting permissions"
+  set_permissions
+else
+  print_modname
+
+  unzip -o "$ZIPFILE" customize.sh -d $MODPATH >&2
+
+  if ! grep -q '^SKIPUNZIP=1$' $MODPATH/customize.sh 2>/dev/null; then
+    ui_print "- Extracting module files"
+    unzip -o "$ZIPFILE" -x 'META-INF/*' -d $MODPATH >&2
+
+    # Default permissions
+    set_perm_recursive $MODPATH 0 0 0755 0644
+  fi
+
+  # Load customization script
+  [ -f $MODPATH/customize.sh ] && . $MODPATH/customize.sh
+fi
+
+# Handle replace folders
 for TARGET in $REPLACE; do
+  ui_print "- Replace target: $TARGET"
   mktouch $MODPATH$TARGET/.replace
 done
-$AUTOMOUNT && touch $MODPATH/auto_mount
-$PROPFILE && cp -af $INSTALLER/common/system.prop $MODPATH/system.prop
-cp -af $INSTALLER/module.prop $MODPATH/module.prop
+
 if $BOOTMODE; then
-  mktouch /sbin/.core/img/$MODID/update
-  cp -af $INSTALLER/module.prop /sbin/.core/img/$MODID/module.prop
+  # Update info for Magisk Manager
+  mktouch $NVBASE/modules/$MODID/update
+  cp -af $MODPATH/module.prop $NVBASE/modules/$MODID/module.prop
 fi
-$POSTFSDATA && cp -af $INSTALLER/common/post-fs-data.sh $MODPATH/post-fs-data.sh
-$LATESTARTSERVICE && cp -af $INSTALLER/common/service.sh $MODPATH/service.sh
-ui_print "- 正在设置权限"
-set_permissions
-unmount_magisk_img
+
+# Copy over custom sepolicy rules
+if [ -f $MODPATH/sepolicy.rule -a -e $PERSISTDIR ]; then
+  ui_print "- Installing custom sepolicy patch"
+  PERSISTMOD=$PERSISTDIR/magisk/$MODID
+  mkdir -p $PERSISTMOD
+  cp -af $MODPATH/sepolicy.rule $PERSISTMOD/sepolicy.rule
+fi
+
+# Remove stuffs that don't belong to modules
+rm -rf \
+$MODPATH/system/placeholder $MODPATH/customize.sh \
+$MODPATH/README.md $MODPATH/.git* 2>/dev/null
+
+##############
+# Finalizing
+##############
+
+cd /
 $BOOTMODE || recovery_cleanup
 rm -rf $TMPDIR
-ui_print "- 完成"
+
+ui_print "- Done"
 exit 0

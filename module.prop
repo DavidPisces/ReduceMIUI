@@ -1,6 +1,6 @@
-id=ReduceMIUI
-name=MIUI 精简计划
+id=Reducemiui
+name=Reduce MIUI
+version=2.1
 versionCode=1
-minMagisk=17000
 author=雄氏老方
-description=保留完整功能的前提下尽可能精简系统服务 精简列表更新日期：
+description=在保证不影响系统的情况下尽可能精简进程
