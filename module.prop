@@ -1,6 +1,7 @@
 id=Reducemiui
-name=Reduce MIUI
+name=ReduceMIUI
+version=2.0
 versionCode=2
-minMagisk=20300
 author=雄氏老方
-description=保留完整功能的前提下尽可能精简系统服务 精简列表更新日期：
+minMagisk=20000
+description=尽可能精简系统服务 精简列表更新日期：

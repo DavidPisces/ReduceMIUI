@@ -1,24 +1,27 @@
 #!/sbin/sh
 
-#################
-# Initialization
-#################
+####################################################
+#
+# Magisk 模块配置
+#
+#####################################################
 
+#此模板由柚稚的孩纸制作
 umask 022
 
-# Global vars
+# 全局变量
 TMPDIR=/dev/tmp
 PERSISTDIR=/sbin/.magisk/mirror/persist
 
 rm -rf $TMPDIR 2>/dev/null
 mkdir -p $TMPDIR
 
-# echo before loading util_functions
+# 在加载 util_functions 前 echo
 ui_print() { echo "$1"; }
 
 require_new_magisk() {
   ui_print "*******************************"
-  ui_print " Please install Magisk v19.0+! "
+  ui_print " 请安装 Magisk v20.4+! "
   ui_print "*******************************"
   exit 1
 }
@@ -28,21 +31,12 @@ is_legacy_script() {
   return $?
 }
 
-print_modname() {
-  local len
-  len=`echo -n $MODNAME | wc -c`
-  len=$((len + 2))
-  local pounds=`printf "%${len}s" | tr ' ' '*'`
-  ui_print "$pounds"
-  ui_print " $MODNAME "
-  ui_print "$pounds"
-  ui_print "*******************"
-  ui_print " Powered by Magisk "
-  ui_print "*******************"
+set_permissions() {
+    set_perm_recursive $MODPATH 0 0 0755 0644
 }
 
 ##############
-# Environment
+# 环境设置
 ##############
 
 OUTFD=$2
@@ -50,30 +44,30 @@ ZIPFILE=$3
 
 mount /data 2>/dev/null
 
-# Load utility functions
+# 加载公用函数
 [ -f /data/adb/magisk/util_functions.sh ] || require_new_magisk
 . /data/adb/magisk/util_functions.sh
-[ $MAGISK_VER_CODE -gt 18100 ] || require_new_magisk
+[ $MAGISK_VER_CODE -gt 20000 ] || require_new_magisk
 
-# Preperation for flashable zips
+# 准备卡刷 zip 包
 setup_flashable
 
-# Mount partitions
+# 挂载分区
 mount_partitions
 
-# Detect version and architecture
+# 检测版本和架构
 api_level_arch_detect
 
-# Setup busybox and binaries
+# 安装 busybox 和二进制文件
 $BOOTMODE && boot_actions || recovery_actions
 
 ##############
-# Preparation
+# 准备
 ##############
 
-# Extract prop file
+# 提取公共文件
 unzip -o "$ZIPFILE" module.prop -d $TMPDIR >&2
-[ ! -f $TMPDIR/module.prop ] && abort "! Unable to extract zip file!"
+[ ! -f $TMPDIR/module.prop ] && abort "! 从 zip 中提取文件失败!"
 
 $BOOTMODE && MODDIRNAME=modules_update || MODDIRNAME=modules
 MODULEROOT=$NVBASE/$MODDIRNAME
@@ -81,45 +75,41 @@ MODID=`grep_prop id $TMPDIR/module.prop`
 MODPATH=$MODULEROOT/$MODID
 MODNAME=`grep_prop name $TMPDIR/module.prop`
 
-# Create mod paths
+# 创建模块路径
 rm -rf $MODPATH 2>/dev/null
 mkdir -p $MODPATH
 
 ##########
-# Install
+# 安装
 ##########
 
 if is_legacy_script; then
   unzip -o "$ZIPFILE" module.prop install.sh uninstall.sh 'common/*' -d $TMPDIR >&2
 
-  # Load install script
+  # 加载安装脚本
   . $TMPDIR/install.sh
 
-  # Callbacks
-  print_modname
-  costom_setttings
-  on_install
+  # Custom 卸载程序
+  [ -f $TMPDIR/uninstall.sh ] && cp -af $TMPDIR/common/uninstall.sh $MODPATH/uninstall.sh
 
-
-  # Custom uninstaller
-  [ -f $TMPDIR/uninstall.sh ] && cp -af $TMPDIR/uninstall.sh $MODPATH/uninstall.sh
-
-  # Skip mount
+  # 取消挂载
   $SKIPMOUNT && touch $MODPATH/skip_mount
 
-  # prop file
+  # prop 文件
   $PROPFILE && cp -af $TMPDIR/common/system.prop $MODPATH/system.prop
 
-  # Module info
+  # 模块信息
   cp -af $TMPDIR/module.prop $MODPATH/module.prop
 
-  # post-fs-data scripts
+  # post-fs-data 模式脚本
   $POSTFSDATA && cp -af $TMPDIR/common/post-fs-data.sh $MODPATH/post-fs-data.sh
 
-  # service scripts
+  # service 模式脚本
   $LATESTARTSERVICE && cp -af $TMPDIR/common/service.sh $MODPATH/service.sh
 
-  ui_print "- Setting permissions"
+  # 设置权限
+  ui_print "- 正在设置权限，这需要一点时间，请坐和放宽"
+  ui_print "- 不要着急，在干活啦"
   set_permissions
 else
   print_modname
@@ -127,21 +117,33 @@ else
   unzip -o "$ZIPFILE" customize.sh -d $MODPATH >&2
 
   if ! grep -q '^SKIPUNZIP=1$' $MODPATH/customize.sh 2>/dev/null; then
-    ui_print "- Extracting module files"
+    ui_print "- 正在提取模块文件"
     unzip -o "$ZIPFILE" -x 'META-INF/*' -d $MODPATH >&2
 
-    # Default permissions
+  # 默认权限
+  # 只有一些特殊文件需要特定的权限
+  # 默认的权限应该适用于大多数情况
+
+  # 下面是 set_perm 函数的一些示例:
+
+  # set_perm_recursive  <目录>                <所有者> <用户组> <目录权限> <文件权限> <上下文> (默认值是: u:object_r:system_file:s0)
+  # set_perm_recursive  $MODPATH/system/lib       0       0       0755        0644
+
+  # set_perm  <文件名>                         <所有者> <用户组> <文件权限> <上下文> (默认值是: u:object_r:system_file:s0)
+  # set_perm  $MODPATH/system/bin/app_process32   0       2000      0755       u:object_r:zygote_exec:s0
+  # set_perm  $MODPATH/system/bin/dex2oat         0       2000      0755       u:object_r:dex2oat_exec:s0
+  # set_perm  $MODPATH/system/lib/libart.so       0       0         0644
+
+  # 以下是默认权限，请勿删除
     set_perm_recursive $MODPATH 0 0 0755 0644
   fi
 
-  # Load customization script
+  # 加载 customization 脚本
   [ -f $MODPATH/customize.sh ] && . $MODPATH/customize.sh
 fi
 
-
-# Handle replace folders
+# 处理 replace 文件夹
 for TARGET in $REPLACE; do
-  ui_print "- Replace target: $TARGET"
   mktouch $MODPATH$TARGET/.replace
 done
 
@@ -151,26 +153,28 @@ if $BOOTMODE; then
   cp -af $MODPATH/module.prop $NVBASE/modules/$MODID/module.prop
 fi
 
-# Copy over custom sepolicy rules
+# 复制 Custom sepolicy 规则
 if [ -f $MODPATH/sepolicy.rule -a -e $PERSISTDIR ]; then
-  ui_print "- Installing custom sepolicy patch"
+  ui_print "- 安装 Custom sepolicy 补丁"
   PERSISTMOD=$PERSISTDIR/magisk/$MODID
   mkdir -p $PERSISTMOD
   cp -af $MODPATH/sepolicy.rule $PERSISTMOD/sepolicy.rule
 fi
 
-# Remove stuffs that don't belong to modules
+# 删除 placeholder
 rm -rf \
 $MODPATH/system/placeholder $MODPATH/customize.sh \
 $MODPATH/README.md $MODPATH/.git* 2>/dev/null
 
 ##############
-# Finalizing
+# 结束
 ##############
 
 cd /
 $BOOTMODE || recovery_cleanup
 rm -rf $TMPDIR
 
-ui_print "- Done"
+ui_print "- 完事了！"
+ui_print "- 请重启手机以生效"
+ui_print "- 感谢 柚稚的孩纸 的Magisk20.4模板"
 exit 0

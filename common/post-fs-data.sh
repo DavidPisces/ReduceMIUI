@@ -1,9 +1,8 @@
+# 开机之前执行
 #!/system/bin/sh
-# Do NOT assume where your module will be located.
-# ALWAYS use $MODDIR if you need to know where this script
-# and module is placed.
-# This will make sure your module will still work
-# if Magisk change its mount point in the future
+# 请不要硬编码 /magisk/modname/... ; 请使用 $MODDIR/...
+# 这将使你的脚本更加兼容 即使Magisk在未来改变了它的挂载点
 MODDIR=${0%/*}
 
-# This script will be executed in post-fs-data mode
+# 这个脚本将以 post-fs-data 模式执行
+# 更多信息请访问 Magisk 主题
