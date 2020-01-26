@@ -90,14 +90,16 @@ mkdir -p $MODPATH
 ##########
 
 if is_legacy_script; then
-  unzip -oj "$ZIPFILE" module.prop install.sh uninstall.sh 'common/*' -d $TMPDIR >&2
+  unzip -o "$ZIPFILE" module.prop install.sh uninstall.sh 'common/*' -d $TMPDIR >&2
 
   # Load install script
   . $TMPDIR/install.sh
 
   # Callbacks
   print_modname
+  costom_setttings
   on_install
+
 
   # Custom uninstaller
   [ -f $TMPDIR/uninstall.sh ] && cp -af $TMPDIR/uninstall.sh $MODPATH/uninstall.sh
@@ -106,16 +108,16 @@ if is_legacy_script; then
   $SKIPMOUNT && touch $MODPATH/skip_mount
 
   # prop file
-  $PROPFILE && cp -af $TMPDIR/system.prop $MODPATH/system.prop
+  $PROPFILE && cp -af $TMPDIR/common/system.prop $MODPATH/system.prop
 
   # Module info
   cp -af $TMPDIR/module.prop $MODPATH/module.prop
 
   # post-fs-data scripts
-  $POSTFSDATA && cp -af $TMPDIR/post-fs-data.sh $MODPATH/post-fs-data.sh
+  $POSTFSDATA && cp -af $TMPDIR/common/post-fs-data.sh $MODPATH/post-fs-data.sh
 
   # service scripts
-  $LATESTARTSERVICE && cp -af $TMPDIR/service.sh $MODPATH/service.sh
+  $LATESTARTSERVICE && cp -af $TMPDIR/common/service.sh $MODPATH/service.sh
 
   ui_print "- Setting permissions"
   set_permissions
@@ -135,6 +137,7 @@ else
   # Load customization script
   [ -f $MODPATH/customize.sh ] && . $MODPATH/customize.sh
 fi
+
 
 # Handle replace folders
 for TARGET in $REPLACE; do

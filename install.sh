@@ -28,9 +28,22 @@ SKIPMOUNT=false
 PROPFILE=false
 
 # Set to true if you need post-fs-data script
-POSTFSDATA=true
+POSTFSDATA=ture
+
 # Set to true if you need late_start service script
-LATESTARTSERVICE=false
+LATESTARTSERVICE=ture
+
+# 模块版本号
+version="2.1.1"
+
+# 模块精简列表更新日期
+update_date="20.1.26"
+
+# Zram调整配置(默认关闭)
+enable_zram="0"
+
+# 预读调整(默认启用)
+enable_prefetch="1"
 
 ##########################################################################################
 # Replace list
@@ -95,7 +108,25 @@ REPLACE="
 /system/data-app
 /system/vendor/data-app
 "
+costom_setttings(){
+# 预读大小调整(128kb)
+  if [ $enable_prefetch = "1" ] ; then
+	 echo -e "sleep 9 \nchmod 775 /sys/block/mmcblk0/queue/read_ahead_kb \nchmod 775 /sys/block/mmcblk0/queue/iostats \nwhile true; do \necho '128' > /sys/block/mmcblk0/queue/read_ahead_kb \necho '0' > /sys/block/mmcblk0/queue/iostats \necho '0' > /sys/block/sda/queue/iostats \necho '128' > /sys/block/sda/queue/read_ahead_kb \ndone" >> $TMPDIR/common/service.sh
+  else
+     ui_print ""
+  fi
+# 写入更新日期
+  echo -n "$update_date" >> $TMPDIR/module.prop
 
+# Zram调整配置
+  if [ $enable_zram = "0" ] ; then
+    rm -f /data/adb/modules_update/Reducemiui/system/etc/mcd_default.conf
+  else
+    echo -n "(已启用Zram调整)" >> $TMPDIR/module.prop
+  fi
+# 写入版本号
+  echo -e "\nversion=$version" >> $TMPDIR/module.prop
+}
 ##########################################################################################
 #
 # Function Callbacks
@@ -175,7 +206,6 @@ print_modname() {
 on_install() {
   # The following is the default implementation: extract $ZIPFILE/system to $MODPATH
   # Extend/change the logic to whatever you want
-
   ui_print "- Extracting module files"
   unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
 }
@@ -196,3 +226,5 @@ set_permissions() {
 }
 
 # You can add more functions to assist your custom script code
+# Add Functions
+
