@@ -4,7 +4,7 @@ PROPFILE=false
 # 如果您需要post-fs-data脚本（post-fs-data.sh），请将其设置为true
 POSTFSDATA=false
 # 如果您需要late_start服务脚本（service.sh），请将其设置为true
-LATESTARTSERVICE=false
+LATESTARTSERVICE=true
 # 模块版本号
 version="2.1.1"
 # 模块精简列表更新日期
