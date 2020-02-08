@@ -2,13 +2,13 @@ SKIPMOUNT=false
 # 如果您需要加载system.prop，请将其设置为true
 PROPFILE=false
 # 如果您需要post-fs-data脚本（post-fs-data.sh），请将其设置为true
-POSTFSDATA=false
+POSTFSDATA=true
 # 如果您需要late_start服务脚本（service.sh），请将其设置为true
 LATESTARTSERVICE=true
 # 模块版本号
-version="2.1.1"
+version="2.1.2"
 # 模块精简列表更新日期
-update_date="20.1.26"
+update_date="20.2.8"
 # Zram调整配置(默认关闭)
 enable_zram="0"
 # 预读调整(默认启用)
@@ -58,12 +58,16 @@ REPLACE="
 /system/app/MiWallpaper
 /system/app/MiPlayClient
 /system/app/greenguard
+/system/app/QColor
+
 /system/priv-app/MiRcs
 /system/priv-app/MiGameCenterSDKService
 /system/app/TranslationService
 /system/priv-app/MiuiFreeformService
 /system/priv-app/dpmserviceapp
 /system/priv-app/EmergencyInfo
+/system/priv-app/MiService
+
 /system/data-app
 /system/vendor/data-app
 "
@@ -76,7 +80,6 @@ costom_setttings(){
   fi
 # 写入更新日期
   echo -n "$update_date" >> $TMPDIR/module.prop
-
 # Zram调整配置
   if [ $enable_zram = "0" ] ; then
     rm -f /data/adb/modules_update/Reducemiui/system/etc/mcd_default.conf

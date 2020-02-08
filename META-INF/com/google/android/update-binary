@@ -176,5 +176,4 @@ rm -rf $TMPDIR
 
 ui_print "- 完事了！"
 ui_print "- 请重启手机以生效"
-ui_print "- 感谢 柚稚的孩纸 的Magisk20.4模板"
 exit 0
