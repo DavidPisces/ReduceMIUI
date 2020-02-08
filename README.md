@@ -105,114 +105,58 @@
 ##### 精简列表
 
 > /system/app/systemAdSolution
->
-> /system/app/MSA-CN-NO_INSTALL_PACKAGE
->
+>/system/app/MSA-CN-NO_INSTALL_PACKAGE
 > /system/app/mab
->
-> /system/app/MSA
->
+>/system/app/MSA
 > /system/app/AnalyticsCore
->
-> /system/app/CarrierDefaultApp
->
+>/system/app/CarrierDefaultApp
 > /system/app/talkback
->
-> /system/app/TouchAssistant
->
+>/system/app/TouchAssistant
 > /system/app/PrintSpooler
->
-> /system/app/PhotoTable
->
+>/system/app/PhotoTable
 > /system/app/BuiltInPrintService
->
-> /system/app/BasicDreams
->
+>/system/app/BasicDreams
 > /system/app/mid_test
->
-> /system/app/MiuiVpnSdkManager
->
+>/system/app/MiuiVpnSdkManager
 > /system/app/BookmarkProvider
->
-> /system/app/FidoAuthen
->
+>/system/app/FidoAuthen
 > /system/app/FidoClient
->
-> /system/app/FidoCryptoService
->
+>/system/app/FidoCryptoService
 > /system/app/YouDaoEngine
->
-> /system/app/AutoTest
->
+>/system/app/AutoTest
 > /system/app/AutoRegistration
->
-> /system/app/KSICibaEngine
->
+>/system/app/KSICibaEngine
 > /system/app/PrintSpooler
->
-> /system/app/PrintRecommendationService
->
+>/system/app/PrintRecommendationService
 > /system/app/SeempService
->
-> /system/app/com.miui.qr
->
+>/system/app/com.miui.qr
 > /system/app/Traceur
->
-> /system/app/GPSLogSave
->
+>/system/app/GPSLogSave
 > /system/app/SystemHelper
-> /system/app/Stk
->
+>/system/app/Stk
 > /system/app/SYSOPT
->
-> /system/app/WMService
->
+>/system/app/WMService
 > /system/app/xdivert
->
-> /system/app/CertInstaller
->
+>/system/app/CertInstaller
 > /system/app/MiuiDaemon
->
-> /system/app/Qmmi
->
+>/system/app/Qmmi
 > /system/app/QdcmFF
->
-> /system/app/Xman
->
+>/system/app/Xman
 > /system/app/Yman
->
-> /system/app/ModemLog
->
+>/system/app/ModemLog
 > /system/app/seccamsample
->
-> /system/app/MiWallpaper
->
+>/system/app/MiWallpaper
 > /system/app/MiPlayClient
->
-> /system/app/greenguard
+>/system/app/greenguard
+> /system/app/QColor
 >
 > /system/priv-app/MiRcs
->
-> /system/priv-app/MiGameCenterSDKService
->
+>/system/priv-app/MiGameCenterSDKService
 > /system/app/TranslationService
->
-> /system/priv-app/MiuiFreeformService
->
+>/system/priv-app/MiuiFreeformService
 > /system/priv-app/dpmserviceapp
->
-> /system/priv-app/EmergencyInfo
+>/system/priv-app/EmergencyInfo
+> /system/priv-app/MiService
 >
 > /system/data-app
->
-> /vendor/data-app
-
-##### 自选冻结列表
-
-> 小米浏览器
->
-> 内容中心
->
-> 小米音乐
->
-> 小米视频
+>/system/vendor/data-app
