@@ -11,8 +11,6 @@ version="2.1.2"
 update_date="20.2.8"
 # Zram调整配置(默认关闭)
 enable_zram="0"
-# 预读调整(默认启用)
-enable_prefetch="1"
 REPLACE="
 /system/app/systemAdSolution
 /system/app/MSA-CN-NO_INSTALL_PACKAGE
@@ -72,12 +70,6 @@ REPLACE="
 /system/vendor/data-app
 "
 costom_setttings(){
-# 预读大小调整(128kb)
-  if [ $enable_prefetch = "1" ] ; then
-	 echo -e "sleep 9 \nchmod 775 /sys/block/mmcblk0/queue/read_ahead_kb \nchmod 775 /sys/block/mmcblk0/queue/iostats \necho '128' > /sys/block/mmcblk0/queue/read_ahead_kb \necho '0' > /sys/block/mmcblk0/queue/iostats \necho '0' > /sys/block/sda/queue/iostats \necho '128' > /sys/block/sda/queue/read_ahead_kb \n" >> $TMPDIR/common/service.sh
-  else
-     ui_print ""
-  fi
 # 写入更新日期
   echo -n "$update_date" >> $TMPDIR/module.prop
 # Zram调整配置
