@@ -33,11 +33,21 @@
 
 ##### 更新日志
 
+> 20.2.12 （2.11-Magisk20.3+）
+>
+> 增加/system/product下部分app精简
+>
+> 精简列表调整
+
+
+
 > 20.2.8 (2.1.2-Magisk20.3+)
 >
 > 精简列表新增QColor 服务与反馈
 >
 > 支持Wifi Log自动删除 （小米MIX2s）
+
+
 
 >20.1.26 （2.1.1-Magisk20.3+）
 >
@@ -49,7 +59,9 @@
 >
 >配置参数见下文
 >
->（冻结功能未上线）
+>（冻结功能未上线)
+
+
 
 >20.1.25 （2.1-Magisk20.3+）
 >准备重写
@@ -59,6 +71,8 @@
 >这个版本只支持精简和Zram调整，Zram调整默认开启
 >
 >感谢@柚稚的孩纸 的帮助
+
+
 
 > 11.29 (2.0.1-Magisk19以下)
 >
@@ -92,16 +106,6 @@
 
 
 
-> enable_prefetch
->
-> 预读调整为128kb，默认启用，0为关闭，1为开启
-
-
-
-> enable_mode2
->
-> 自选模式，使用shell冻结，使用音量键自选，0为关闭，1为开启
-
 ##### 精简列表
 
 > /system/app/systemAdSolution
@@ -134,6 +138,14 @@
 >
 > /system/app/BookmarkProvider
 >
+> /system/app/BuiltInPrintService
+>
+> /system/app/CarrierDefaultApp
+>
+> /system/app/CatchLog
+>
+> /system/app/CertInstaller
+>
 > /system/app/FidoAuthen
 >
 > /system/app/FidoClient
@@ -147,6 +159,10 @@
 > /system/app/AutoRegistration
 >
 > /system/app/KSICibaEngine
+>
+> /system/app/MiuiDaemon
+>
+> /system/app/MiuiBugReport
 >
 > /system/app/PrintSpooler
 >
@@ -169,8 +185,6 @@
 > /system/app/WMService
 >
 > /system/app/xdivert
->
-> /system/app/CertInstaller
 >
 > /system/app/MiuiDaemon
 >
@@ -207,6 +221,24 @@
 > /system/priv-app/EmergencyInfo
 >
 > /system/priv-app/MiService
+>
+> /system/priv-app/UserDictionaryProvider
+>
+> /system/product/app/datastatusnotification
+>
+> /system/product/app/PhotoTable
+>
+> /system/product/app/QdcmFF
+>
+> /system/product/app/talkback
+>
+> /system/product/app/xdivert
+>
+> /system/product/priv-app/dpmserviceapp
+>
+> /system/product/priv-app/EmergencyInfo
+>
+> /system/product/priv-app/seccamservice
 >
 > /system/data-app
 >
