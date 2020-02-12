@@ -6,11 +6,12 @@ POSTFSDATA=true
 # 如果您需要late_start服务脚本（service.sh），请将其设置为true
 LATESTARTSERVICE=true
 # 模块版本号
-version="2.1.2"
+version="2.11"
 # 模块精简列表更新日期
-update_date="20.2.8"
+update_date="20.2.11"
 # Zram调整配置(默认关闭)
 enable_zram="0"
+
 REPLACE="
 /system/app/systemAdSolution
 /system/app/MSA-CN-NO_INSTALL_PACKAGE
@@ -27,6 +28,10 @@ REPLACE="
 /system/app/mid_test
 /system/app/MiuiVpnSdkManager
 /system/app/BookmarkProvider
+/system/app/BuiltInPrintService
+/system/app/CarrierDefaultApp
+/system/app/CatchLog
+/system/app/CertInstaller
 /system/app/FidoAuthen
 /system/app/FidoClient
 /system/app/FidoCryptoService
@@ -34,6 +39,8 @@ REPLACE="
 /system/app/AutoTest
 /system/app/AutoRegistration
 /system/app/KSICibaEngine
+/system/app/MiuiDaemon
+/system/app/MiuiBugReport
 /system/app/PrintSpooler
 /system/app/PrintRecommendationService
 /system/app/SeempService
@@ -45,7 +52,6 @@ REPLACE="
 /system/app/SYSOPT
 /system/app/WMService
 /system/app/xdivert
-/system/app/CertInstaller
 /system/app/MiuiDaemon
 /system/app/Qmmi
 /system/app/QdcmFF
@@ -57,7 +63,6 @@ REPLACE="
 /system/app/MiPlayClient
 /system/app/greenguard
 /system/app/QColor
-
 /system/priv-app/MiRcs
 /system/priv-app/MiGameCenterSDKService
 /system/app/TranslationService
@@ -65,7 +70,15 @@ REPLACE="
 /system/priv-app/dpmserviceapp
 /system/priv-app/EmergencyInfo
 /system/priv-app/MiService
-
+/system/priv-app/UserDictionaryProvider/
+/system/product/app/datastatusnotification
+/system/product/app/PhotoTable
+/system/product/app/QdcmFF
+/system/product/app/talkback
+/system/product/app/xdivert
+/system/product/priv-app/dpmserviceapp
+/system/product/priv-app/EmergencyInfo
+/system/product/priv-app/seccamservice
 /system/data-app
 /system/vendor/data-app
 "
