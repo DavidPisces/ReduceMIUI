@@ -9,9 +9,9 @@ POSTFSDATA=true
 # 如果您需要late_start服务脚本（service.sh），请将其设置为true
 LATESTARTSERVICE=true
 # 模块版本号
-version="2.12"
+version="2.13"
 # 模块精简列表更新日期
-update_date="20.2.14"
+update_date="20.2.15"
 # Zram调整配置(默认关闭)
 enable_zram="0"
 
