@@ -78,6 +78,8 @@ REPLACE="
 /system/priv-app/MiService
 /system/priv-app/UserDictionaryProvider
 /system/priv-app/ONS
+/system/priv-app/MusicFX
+/system/app/CatcherPatch
 
 /system/product/app/datastatusnotification
 /system/product/app/PhotoTable
@@ -103,6 +105,22 @@ costom_setttings(){
   fi
 # 写入版本号
   echo -e "\nversion=$version" >> $TMPDIR/module.prop
+}
+
+user_miuiapp_uninstall(){
+# 卸载MIUI预装
+# pm uninstall com.xiaomi.jr
+# pm uninstall com.duokan.reader
+# pm uninstall com.duokan.phone.remotecontroller
+# pm uninstall com.miui.userguide
+# pm uninstall com.xiaomi.gamecenter
+# pm uninstall com.xiaomi.gamecenter.sdk.service
+# pm uninstall com.miui.huanji
+# pm uninstall com.mi.liveassistant
+# pm uninstall com.sohu.inputmethod.sogou.xiaomi
+# pm uninstall com.iflytek.inputmethod.miui
+# pm uninstall com.miui.notes
+  ui_print "- uninstall success."
 }
 on_install(){
   ui_print "- 提取模块文件"
