@@ -1,3 +1,6 @@
+# ReduceMIUI 精简计划 配置文件
+
+# 跳过挂载
 SKIPMOUNT=false
 # 如果您需要加载system.prop，请将其设置为true
 PROPFILE=false
@@ -6,9 +9,9 @@ POSTFSDATA=true
 # 如果您需要late_start服务脚本（service.sh），请将其设置为true
 LATESTARTSERVICE=true
 # 模块版本号
-version="2.11"
+version="2.12"
 # 模块精简列表更新日期
-update_date="20.2.11"
+update_date="20.2.14"
 # Zram调整配置(默认关闭)
 enable_zram="0"
 
@@ -63,6 +66,9 @@ REPLACE="
 /system/app/MiPlayClient
 /system/app/greenguard
 /system/app/QColor
+/system/app/SogouInput
+/system/app/PowerKeeper
+/system/app/PowerChecker
 /system/priv-app/MiRcs
 /system/priv-app/MiGameCenterSDKService
 /system/app/TranslationService
@@ -70,7 +76,9 @@ REPLACE="
 /system/priv-app/dpmserviceapp
 /system/priv-app/EmergencyInfo
 /system/priv-app/MiService
-/system/priv-app/UserDictionaryProvider/
+/system/priv-app/UserDictionaryProvider
+/system/priv-app/ONS
+
 /system/product/app/datastatusnotification
 /system/product/app/PhotoTable
 /system/product/app/QdcmFF
@@ -88,8 +96,10 @@ costom_setttings(){
 # Zram调整配置
   if [ $enable_zram = "0" ] ; then
     rm -f /data/adb/modules_update/Reducemiui/system/etc/mcd_default.conf
+	ui_print "- Zram配置未启用，若使用配置文件请修改模块配置文件install.sh"
   else
     echo -n "(已启用Zram调整)" >> $TMPDIR/module.prop
+	ui_print "- Zram配置已启用，若关闭配置文件请修改模块配置文件install.sh"
   fi
 # 写入版本号
   echo -e "\nversion=$version" >> $TMPDIR/module.prop

@@ -33,6 +33,15 @@
 
 ##### 更新日志
 
+> 20.2.14  (2.12-Magisk20.3+)
+>
+> 精简列表增加：ons 搜狗拼音输入法 耗电检测 电量与性能
+>
+> Zram配置下调至2801
+>
+> (ps：不会影响进入耗电统计，旧版MIUI会受影响)
+> 使用搜狗小米版的会输入法消失
+
 > 20.2.12 （2.11-Magisk20.3+）
 >
 > 增加/system/product下部分app精简
@@ -243,3 +252,10 @@
 > /system/data-app
 >
 > /system/vendor/data-app
+>
+> /system/app/SogouInput
+>
+> /system/app/PowerKeeper
+>
+> /system/app/PowerChecker
+
