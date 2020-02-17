@@ -9,11 +9,11 @@ POSTFSDATA=true
 # 如果您需要late_start服务脚本（service.sh），请将其设置为true
 LATESTARTSERVICE=true
 # 模块版本号
-version="2.13"
+version="2.14"
 # 模块精简列表更新日期
-update_date="20.2.15"
+update_date="20.2.17"
 # Zram调整配置(默认关闭)
-enable_zram="0"
+enable_zram="1"
 
 REPLACE="
 /system/app/systemAdSolution
@@ -72,7 +72,6 @@ REPLACE="
 /system/priv-app/MiRcs
 /system/priv-app/MiGameCenterSDKService
 /system/app/TranslationService
-/system/priv-app/MiuiFreeformService
 /system/priv-app/dpmserviceapp
 /system/priv-app/EmergencyInfo
 /system/priv-app/MiService
@@ -80,7 +79,6 @@ REPLACE="
 /system/priv-app/ONS
 /system/priv-app/MusicFX
 /system/app/CatcherPatch
-
 /system/product/app/datastatusnotification
 /system/product/app/PhotoTable
 /system/product/app/QdcmFF
@@ -107,21 +105,6 @@ costom_setttings(){
   echo -e "\nversion=$version" >> $TMPDIR/module.prop
 }
 
-user_miuiapp_uninstall(){
-# 卸载MIUI预装
-# pm uninstall com.xiaomi.jr
-# pm uninstall com.duokan.reader
-# pm uninstall com.duokan.phone.remotecontroller
-# pm uninstall com.miui.userguide
-# pm uninstall com.xiaomi.gamecenter
-# pm uninstall com.xiaomi.gamecenter.sdk.service
-# pm uninstall com.miui.huanji
-# pm uninstall com.mi.liveassistant
-# pm uninstall com.sohu.inputmethod.sogou.xiaomi
-# pm uninstall com.iflytek.inputmethod.miui
-# pm uninstall com.miui.notes
-  ui_print "- uninstall success."
-}
 on_install(){
   ui_print "- 提取模块文件"
   unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
