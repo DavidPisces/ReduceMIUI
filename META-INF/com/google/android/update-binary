@@ -21,7 +21,7 @@ ui_print() { echo "$1"; }
 
 require_new_magisk() {
   ui_print "*******************************"
-  ui_print " 请安装 Magisk v20.4+! "
+  ui_print " 请安装 Magisk v19+! "
   ui_print "*******************************"
   exit 1
 }
@@ -47,7 +47,7 @@ mount /data 2>/dev/null
 # 加载公用函数
 [ -f /data/adb/magisk/util_functions.sh ] || require_new_magisk
 . /data/adb/magisk/util_functions.sh
-[ $MAGISK_VER_CODE -gt 20000 ] || require_new_magisk
+[ $MAGISK_VER_CODE -gt 19000 ] || require_new_magisk
 
 # 准备卡刷 zip 包
 setup_flashable
