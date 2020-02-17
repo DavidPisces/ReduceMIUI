@@ -35,7 +35,7 @@
 
 > 20.2.17 （2.14）
 >
-> 恢复MiuiFreeformService，以防窗口模式不能调整程序大小
+> 恢复MiuiFreeformService，以防窗口模式不能调整程序大小， 感谢酷安@星夜StarryNight反馈
 
 > 20.2.15 （2.13）
 >
