@@ -1,5 +1,5 @@
 # ReduceMIUI 精简计划 配置文件
-
+# Made by @雄氏老方
 # 跳过挂载
 SKIPMOUNT=false
 # 如果您需要加载system.prop，请将其设置为true
@@ -9,12 +9,16 @@ POSTFSDATA=true
 # 如果您需要late_start服务脚本（service.sh），请将其设置为true
 LATESTARTSERVICE=true
 # 模块版本号
-version="2.14"
+version="2.17"
 # 模块精简列表更新日期
-update_date="20.2.17"
+update_date="20.2.27"
 # Zram调整配置(默认关闭)
-enable_zram="1"
-
+enable_zram="0"
+# SDK判断
+sdk=`grep_prop ro.build.version.sdk`
+min_sdk=29
+Enable_determination="0"
+# 精简列表
 REPLACE="
 /system/app/systemAdSolution
 /system/app/MSA-CN-NO_INSTALL_PACKAGE
@@ -23,7 +27,6 @@ REPLACE="
 /system/app/AnalyticsCore
 /system/app/CarrierDefaultApp
 /system/app/talkback
-/system/app/TouchAssistant
 /system/app/PrintSpooler
 /system/app/PhotoTable
 /system/app/BuiltInPrintService
@@ -33,8 +36,6 @@ REPLACE="
 /system/app/BookmarkProvider
 /system/app/BuiltInPrintService
 /system/app/CarrierDefaultApp
-/system/app/CatchLog
-/system/app/CertInstaller
 /system/app/FidoAuthen
 /system/app/FidoClient
 /system/app/FidoCryptoService
@@ -43,7 +44,6 @@ REPLACE="
 /system/app/AutoRegistration
 /system/app/KSICibaEngine
 /system/app/MiuiDaemon
-/system/app/MiuiBugReport
 /system/app/PrintSpooler
 /system/app/PrintRecommendationService
 /system/app/SeempService
@@ -53,22 +53,16 @@ REPLACE="
 /system/app/SystemHelper
 /system/app/Stk
 /system/app/SYSOPT
-/system/app/WMService
 /system/app/xdivert
 /system/app/MiuiDaemon
 /system/app/Qmmi
 /system/app/QdcmFF
 /system/app/Xman
 /system/app/Yman
-/system/app/ModemLog
 /system/app/seccamsample
-/system/app/MiWallpaper
 /system/app/MiPlayClient
 /system/app/greenguard
 /system/app/QColor
-/system/app/SogouInput
-/system/app/PowerKeeper
-/system/app/PowerChecker
 /system/priv-app/MiRcs
 /system/priv-app/MiGameCenterSDKService
 /system/app/TranslationService
@@ -90,7 +84,19 @@ REPLACE="
 /system/data-app
 /system/vendor/data-app
 "
+sdk_determination() {
+  if [ $sdk -ge $min_sdk ] ; then
+    ui_print "- 当前SDK为：$sdk"
+  else
+    abort "- 当前SDK为：$sdk，不符合要求最低SDK：$min_sdk"
+	ui_print "- ! 安装终止"
+  fi
+}
 costom_setttings(){
+# 版本判断启用配置
+  if [ $Enable_determination = "1" ] ; then
+    sdk_determination
+  fi
 # 写入更新日期
   echo -n "$update_date" >> $TMPDIR/module.prop
 # Zram调整配置
@@ -104,13 +110,12 @@ costom_setttings(){
 # 写入版本号
   echo -e "\nversion=$version" >> $TMPDIR/module.prop
 }
-
 on_install(){
   ui_print "- 提取模块文件"
   unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
 }
-  on_install
-  ui_print "*******************"
-  ui_print "    Reduce MIUI   "
-  ui_print "*******************"
-  costom_setttings
+on_install
+ui_print "*******************"
+ui_print "    Reduce MIUI   "
+ui_print "*******************"
+costom_setttings

@@ -2,9 +2,11 @@
 
 ##### 这是一个Magisk模块，适用于国内版MIUI  
 
-#### 没有版本机型限制
-
 ######  特点：在不影响正常功能情况下尽可能精简系统进程
+
+[下载地址(Releases)](https://github.com/l2642235863/ReduceMIUI/releases)
+
+[作者酷安主页(@雄氏老方)](http://www.coolapk.com/u/665894)
 
 ##### 主要功能：
 
@@ -18,7 +20,7 @@
 
   ##### 注意事项
 
-  * 模块的主要调整在config.sh,不要对模块的module.prop做过多修改，可能导致脚本出现问题
+  * 模块的主要调整在install.sh,不要对模块的module.prop做过多修改，可能导致脚本出现问题
 
     例如：
 
@@ -33,11 +35,17 @@
 
 ##### 更新日志
 
+> 20.2.27 （2.17）
+>
+> 恢复耗电检测等app，避免后台失控，做的激进了大家反馈不怎么样....
+>
+> 如果要最激进的一版请用2.14
+>
+> 增加对Android版本的判断(使用SDK判断)，由Enable_determination变量控制
+
 > 20.2.17 （2.14）
 >
-> 恢复MiuiFreeformService，以防窗口模式不能调整程序大小， 感谢酷安@星夜StarryNight反馈
-> 
-> 降低Magisk要求版本到19
+> 恢复MiuiFreeformService，以防窗口模式不能调整程序大小
 
 > 20.2.15 （2.13）
 >
@@ -60,15 +68,11 @@
 >
 > 精简列表调整
 
-
-
 > 20.2.8 (2.1.2-Magisk20.3+)
 >
 > 精简列表新增QColor 服务与反馈
 >
 > 支持Wifi Log自动删除 （小米MIX2s）
-
-
 
 >20.1.26 （2.1.1-Magisk20.3+）
 >
@@ -92,8 +96,6 @@
 >这个版本只支持精简和Zram调整，Zram调整默认开启
 >
 >感谢@柚稚的孩纸 的帮助
-
-
 
 > 11.29 (2.0.1-Magisk19以下)
 >
@@ -127,6 +129,14 @@
 
 
 
+> min_sdk
+>
+> Android版本判断要求最小SDK
+>
+> Enable_determination
+>
+> Android判断配置，1为开启
+
 ##### 精简列表
 
 > /system/app/systemAdSolution
@@ -142,8 +152,6 @@
 > /system/app/CarrierDefaultApp
 >
 > /system/app/talkback
->
-> /system/app/TouchAssistant
 >
 > /system/app/PrintSpooler
 >
@@ -163,10 +171,6 @@
 >
 > /system/app/CarrierDefaultApp
 >
-> /system/app/CatchLog
->
-> /system/app/CertInstaller
->
 > /system/app/FidoAuthen
 >
 > /system/app/FidoClient
@@ -182,8 +186,6 @@
 > /system/app/KSICibaEngine
 >
 > /system/app/MiuiDaemon
->
-> /system/app/MiuiBugReport
 >
 > /system/app/PrintSpooler
 >
@@ -203,8 +205,6 @@
 >
 > /system/app/SYSOPT
 >
-> /system/app/WMService
->
 > /system/app/xdivert
 >
 > /system/app/MiuiDaemon
@@ -217,11 +217,7 @@
 >
 > /system/app/Yman
 >
-> /system/app/ModemLog
->
 > /system/app/seccamsample
->
-> /system/app/MiWallpaper
 >
 > /system/app/MiPlayClient
 >
@@ -235,8 +231,6 @@
 >
 > /system/app/TranslationService
 >
-> /system/priv-app/MiuiFreeformService
->
 > /system/priv-app/dpmserviceapp
 >
 > /system/priv-app/EmergencyInfo
@@ -244,6 +238,12 @@
 > /system/priv-app/MiService
 >
 > /system/priv-app/UserDictionaryProvider
+>
+> /system/priv-app/ONS
+>
+> /system/priv-app/MusicFX
+>
+> /system/app/CatcherPatch
 >
 > /system/product/app/datastatusnotification
 >
@@ -264,10 +264,4 @@
 > /system/data-app
 >
 > /system/vendor/data-app
->
-> /system/app/SogouInput
->
-> /system/app/PowerKeeper
->
-> /system/app/PowerChecker
 
