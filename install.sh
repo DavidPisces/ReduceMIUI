@@ -9,9 +9,9 @@ POSTFSDATA=true
 # 如果您需要late_start服务脚本（service.sh），请将其设置为true
 LATESTARTSERVICE=true
 # 模块版本号
-version="2.17"
+version="2.18"
 # 模块精简列表更新日期
-update_date="20.2.27"
+update_date="20.4.17 AM 3:14"
 # Zram调整配置(默认关闭)
 enable_zram="0"
 # SDK判断
@@ -72,7 +72,6 @@ REPLACE="
 /system/priv-app/UserDictionaryProvider
 /system/priv-app/ONS
 /system/priv-app/MusicFX
-/system/app/CatcherPatch
 /system/product/app/datastatusnotification
 /system/product/app/PhotoTable
 /system/product/app/QdcmFF
