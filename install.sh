@@ -9,21 +9,21 @@ POSTFSDATA=true
 # 如果您需要late_start服务脚本（service.sh），请将其设置为true
 LATESTARTSERVICE=true
 # 模块版本号
-version="2.18"
+version="2.19"
 # 模块精简列表更新日期
-update_date="20.4.17 AM 3:14"
+update_date="20.5.8 PM 10:42"
 # Zram调整配置(默认关闭)
-enable_zram="0"
+enable_zram=false
 # SDK判断
 sdk=`grep_prop ro.build.version.sdk`
 min_sdk=29
-Enable_determination="0"
+Enable_determination=false
 # 精简列表
 REPLACE="
 /system/app/systemAdSolution
-/system/app/MSA-CN-NO_INSTALL_PACKAGE
 /system/app/mab
 /system/app/MSA
+/system/app/MSA-CN-NO_INSTALL_PACKAGE
 /system/app/AnalyticsCore
 /system/app/CarrierDefaultApp
 /system/app/talkback
@@ -63,6 +63,7 @@ REPLACE="
 /system/app/MiPlayClient
 /system/app/greenguard
 /system/app/QColor
+/system/app/XMSFKeeper
 /system/priv-app/MiRcs
 /system/priv-app/MiGameCenterSDKService
 /system/app/TranslationService
@@ -82,6 +83,8 @@ REPLACE="
 /system/product/priv-app/seccamservice
 /system/data-app
 /system/vendor/data-app
+/vendor/app/GFManager/
+/vendor/app/GFTest/
 "
 sdk_determination() {
   if [ $sdk -ge $min_sdk ] ; then
@@ -93,13 +96,13 @@ sdk_determination() {
 }
 costom_setttings(){
 # 版本判断启用配置
-  if [ $Enable_determination = "1" ] ; then
+  if [ $Enable_determination = true ] ; then
     sdk_determination
   fi
 # 写入更新日期
   echo -n "$update_date" >> $TMPDIR/module.prop
 # Zram调整配置
-  if [ $enable_zram = "0" ] ; then
+  if [ $enable_zram = false ] ; then
     rm -f /data/adb/modules_update/Reducemiui/system/etc/mcd_default.conf
 	ui_print "- Zram配置未启用，若使用配置文件请修改模块配置文件install.sh"
   else
@@ -109,12 +112,22 @@ costom_setttings(){
 # 写入版本号
   echo -e "\nversion=$version" >> $TMPDIR/module.prop
 }
+auto_uninstall_AD_apps(){
+  pm uninstall com.miui.analytics
+  ui_print "! 已清除Analytics"
+  echo -e "sleep 10\npm uninstall com.miui.analytics" >> $TMPDIR/common/service.sh
+# 有待添加
+}
 on_install(){
   ui_print "- 提取模块文件"
   unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
 }
+
 on_install
-ui_print "*******************"
-ui_print "    Reduce MIUI   "
-ui_print "*******************"
+ui_print "  "
+ui_print "  "
+ui_print "  Reduce MIUI Project"
+ui_print "  "
+ui_print "  "
 costom_setttings
+auto_uninstall_AD_apps

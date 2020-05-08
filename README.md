@@ -24,7 +24,7 @@
 
   ##### 注意事项
   
-  * 模块的主要调整在install.sh,不要对模块的module.prop做过多修改，可能导致脚本出现问题
+  * 模块的主要调整在install.sh,修改install即可,不要对模块的module.prop做过多修改,可能导致脚本出现问题
     
     例如：
 
@@ -34,6 +34,7 @@
   * 模块的版本号是由install.sh自动写入，无需在module.prop重复手动加入
 
   * 模块默认调整Zram上限是2801，有需要请自行调整mcd_default.conf(个人不建议在大内存手机上使用)
+
 
 
 ##### 参数设置
@@ -50,11 +51,11 @@
 
 
 
+> * true为开启，false为关闭
+
 > enable_zram
 >
-> Zram调整配置，默认关闭，0为关闭，1为开启
-
-
+> Zram调整配置，默认关闭。
 
 > min_sdk
 >
@@ -62,5 +63,4 @@
 >
 > Enable_determination
 >
-> Android判断配置，1为开启
-
+> Android判断配置
