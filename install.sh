@@ -63,7 +63,6 @@ REPLACE="
 /system/app/MiPlayClient
 /system/app/greenguard
 /system/app/QColor
-/system/app/XMSFKeeper
 /system/priv-app/MiRcs
 /system/priv-app/MiGameCenterSDKService
 /system/app/TranslationService
