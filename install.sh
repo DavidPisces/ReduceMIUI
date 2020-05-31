@@ -3,19 +3,20 @@
 # 跳过挂载
 SKIPMOUNT=false
 # 如果您需要加载system.prop，请将其设置为true
-PROPFILE=false
+PROPFILE=true
 # 如果您需要post-fs-data脚本（post-fs-data.sh），请将其设置为true
 POSTFSDATA=true
 # 如果您需要late_start服务脚本（service.sh），请将其设置为true
 LATESTARTSERVICE=true
 # 模块版本号
-version="2.19"
+version="2.20-PreviewDemo"
 # 模块精简列表更新日期
-update_date="20.5.8 PM 10:42"
+update_date="20.5.31"
 # Zram调整配置(默认关闭)
 enable_zram=false
 # SDK判断
 sdk=`grep_prop ro.build.version.sdk`
+# 所要求最小版本
 min_sdk=29
 Enable_determination=false
 # 精简列表
@@ -34,7 +35,6 @@ REPLACE="
 /system/app/mid_test
 /system/app/MiuiVpnSdkManager
 /system/app/BookmarkProvider
-/system/app/BuiltInPrintService
 /system/app/CarrierDefaultApp
 /system/app/FidoAuthen
 /system/app/FidoClient
@@ -43,8 +43,6 @@ REPLACE="
 /system/app/AutoTest
 /system/app/AutoRegistration
 /system/app/KSICibaEngine
-/system/app/MiuiDaemon
-/system/app/PrintSpooler
 /system/app/PrintRecommendationService
 /system/app/SeempService
 /system/app/com.miui.qr
@@ -117,6 +115,11 @@ auto_uninstall_AD_apps(){
   echo -e "sleep 10\npm uninstall com.miui.analytics" >> $TMPDIR/common/service.sh
 # 有待添加
 }
+banlist () {
+  ui_print "! DEMO WARNING"
+  mkdir /storage/emulated/0/ReduceMIUI
+  unzip -o "$ZIPFILE" 'banlist.prop' -d /storage/emulated/0/ReduceMIUI/ >&2
+}
 on_install(){
   ui_print "- 提取模块文件"
   unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
@@ -129,4 +132,5 @@ ui_print "  Reduce MIUI Project"
 ui_print "  "
 ui_print "  "
 costom_setttings
+#banlist
 auto_uninstall_AD_apps
