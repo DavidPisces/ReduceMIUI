@@ -115,11 +115,7 @@ auto_uninstall_AD_apps(){
   echo -e "sleep 10\npm uninstall com.miui.analytics" >> $TMPDIR/common/service.sh
 # 有待添加
 }
-banlist () {
-  ui_print "! DEMO WARNING"
-  mkdir /storage/emulated/0/ReduceMIUI
-  unzip -o "$ZIPFILE" 'banlist.prop' -d /storage/emulated/0/ReduceMIUI/ >&2
-}
+
 on_install(){
   ui_print "- 提取模块文件"
   unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
