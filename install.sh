@@ -58,7 +58,7 @@ REPLACE="
 /system/data-app
 /system/vendor/data-app
 "
-sdk_determination() {
+sdk_determination(){
   if [ $sdk -ge $min_sdk ] ; then
     ui_print "- 当前SDK为：$sdk"
   else
