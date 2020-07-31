@@ -154,6 +154,7 @@ if is_legacy_script; then
   	$FUNCTION "DOWN"
   	ui_print "   已录入 [音量-] 键。"
     ui_print "*******************************"
+  fi
   # 加载安装脚本
   . $TMPDIR/install.sh
 
