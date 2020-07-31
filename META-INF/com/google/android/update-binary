@@ -33,6 +33,8 @@ is_legacy_script() {
 
 set_permissions() {
     set_perm_recursive $MODPATH 0 0 0755 0644
+	set_perm_recursive $MODPATH/system/vendor/bin/cnss_diag 0 2000 0755 0755 u:object_r:wcnss_service_exec:s0
+	set_perm_recursive $MODPATH/system/vendor/bin/tcpdump 0 2000 0755 0755 u:object_r:wcnss_service_exec:s0
 }
 
 ##############
@@ -82,7 +84,76 @@ mkdir -p $MODPATH
 ##########
 # 安装
 ##########
+# Keycheck binary by someone755 @Github, idea for code below by Zappo @xda-developers
+KEYCHECK=$TMPDIR/common/keycheck
+chmod 755 $KEYCHECK
 
+keytest() {
+ui_print "- 音量键测试 -"
+ui_print "   请按下 [音量+] 键："
+ui_print "   无反应或传统模式无法正确安装时，请触摸一下屏幕后继续"
+(/system/bin/getevent -lc 1 2>&1 | /system/bin/grep VOLUME | /system/bin/grep " DOWN" > $TMPDIR/events) || return 1
+return 0
+}
+
+chooseport() {
+#note from chainfire @xda-developers: getevent behaves weird when piped, and busybox grep likes that even less than toolbox/toybox grep
+while (true); do
+	/system/bin/getevent -lc 1 2>&1 | /system/bin/grep VOLUME | /system/bin/grep " DOWN" > $TMPDIR/events
+	if (`cat $TMPDIR/events 2>/dev/null | /system/bin/grep VOLUME >/dev/null`); then
+		break
+	fi
+done
+if (`cat $TMPDIR/events 2>/dev/null | /system/bin/grep VOLUMEUP >/dev/null`); then
+	return 0
+else
+	return 1
+fi
+}
+
+chooseportold() {
+# Calling it first time detects previous input. Calling it second time will do what we want
+$KEYCHECK
+$KEYCHECK
+SEL=$?
+if [ "$1" == "UP" ]; then
+	UP=$SEL
+elif [ "$1" == "DOWN" ]; then
+	DOWN=$SEL
+elif [ $SEL -eq $UP ]; then
+	return 0
+elif [ $SEL -eq $DOWN ]; then
+	return 1
+else
+	abort "   未检测到音量键!"
+fi
+}
+
+verformat() {
+vertmp=$(printf %02d `echo ${1#V} | cut -f 1 -d . `)$(printf %02d `echo $1 | cut -f 2 -d . `)$(printf %02d `echo $1 | cut -f 3 -d . `)$(printf %02d `echo $1 | cut -f 4 -d . ` 2>/dev/null)
+echo "$vertmp"
+}
+getfilever() {
+[ `verformat $miuiver` -ge `verformat $1` ] && [ `verformat $miuiver` -le `verformat $2` ] && return 0 || return 1
+}
+
+# 测试音量键
+if keytest; then
+	FUNCTION=chooseport
+	ui_print "*******************************"
+else
+	FUNCTION=chooseportold
+	ui_print "*******************************"
+	ui_print "- 检测到遗留设备！使用旧的 keycheck 方案 -"
+	ui_print "- 进行音量键录入 -"
+	ui_print "   录入：请按下 [音量+] 键："
+	$FUNCTION "UP"
+	ui_print "   已录入 [音量+] 键。"
+	ui_print "   录入：请按下 [音量-] 键："
+	$FUNCTION "DOWN"
+	ui_print "   已录入 [音量-] 键。"
+ui_print "*******************************"
+fi
 if is_legacy_script; then
   unzip -o "$ZIPFILE" module.prop install.sh uninstall.sh 'common/*' -d $TMPDIR >&2
 
