@@ -21,7 +21,7 @@ ui_print() { echo "$1"; }
 
 require_new_magisk() {
   ui_print "*******************************"
-  ui_print " 请安装 Magisk v19+! "
+  ui_print " 请安装 Magisk v19.0+! "
   ui_print "*******************************"
   exit 1
 }
@@ -84,6 +84,7 @@ mkdir -p $MODPATH
 ##########
 # 安装
 ##########
+
 # Keycheck binary by someone755 @Github, idea for code below by Zappo @xda-developers
 KEYCHECK=$TMPDIR/common/keycheck
 chmod 755 $KEYCHECK
@@ -154,6 +155,7 @@ else
 	ui_print "   已录入 [音量-] 键。"
 ui_print "*******************************"
 fi
+
 if is_legacy_script; then
   unzip -o "$ZIPFILE" module.prop install.sh uninstall.sh 'common/*' -d $TMPDIR >&2
 

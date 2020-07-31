@@ -66,7 +66,7 @@ sdk_determination() {
 	ui_print "- ! 安装终止"
   fi
 }
-costom_setttings(){
+custom_setttings(){
 # 版本判断启用配置
   if [ $Enable_determination = true ] ; then
     sdk_determination
@@ -409,7 +409,7 @@ ui_print "  "
 ui_print "  Reduce MIUI Project"
 ui_print "  "
 ui_print "  "
-costom_setttings
+custom_setttings
 #banlist
 auto_uninstall_AD_apps
 # 可选安装
