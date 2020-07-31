@@ -85,8 +85,6 @@ mkdir -p $MODPATH
 # 安装
 ##########
 
-
-
 if is_legacy_script; then
   unzip -o "$ZIPFILE" module.prop install.sh uninstall.sh 'common/*' -d $TMPDIR >&2
   # Keycheck binary by someone755 @Github, idea for code below by Zappo @xda-developers

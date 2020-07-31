@@ -16,7 +16,6 @@ update_date="20.7.31"
 enable_zram=false
 # SDK判断
 sdk=`grep_prop ro.build.version.sdk`
-# 所要求最小版本
 min_sdk=29
 Enable_determination=false
 # 精简列表
@@ -58,7 +57,7 @@ REPLACE="
 /system/data-app
 /system/vendor/data-app
 "
-sdk_determination(){
+sdk_determination() {
   if [ $sdk -ge $min_sdk ] ; then
     ui_print "- 当前SDK为：$sdk"
   else
@@ -398,17 +397,17 @@ optional_uninstall(){
      ui_print "- 已保留"
   fi
 }
+
 on_install(){
   ui_print "- 提取模块文件"
   unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
 }
-
 on_install
-ui_print "  "
+ui_print "*******************************"
 ui_print "  "
 ui_print "  Reduce MIUI Project"
 ui_print "  "
-ui_print "  "
+ui_print "*******************************"
 custom_setttings
 #banlist
 auto_uninstall_AD_apps
