@@ -1,5 +1,5 @@
 # ReduceMIUI 精简计划 配置文件
-# Made by @雄氏老方
+# Made by @雄氏老方 @nkh0472
 # 跳过挂载
 SKIPMOUNT=false
 # 如果您需要加载system.prop，请将其设置为true
@@ -9,9 +9,9 @@ POSTFSDATA=true
 # 如果您需要late_start服务脚本（service.sh），请将其设置为true
 LATESTARTSERVICE=true
 # 模块版本号
-version="2.20-PreviewDemo"
+version="2.20"
 # 模块精简列表更新日期
-update_date="20.5.31"
+update_date="20.10.2"
 # Zram调整配置(默认关闭)
 enable_zram=false
 # SDK判断
@@ -81,6 +81,20 @@ REPLACE="
 /system/vendor/data-app
 /vendor/app/GFManager/
 /vendor/app/GFTest/
+/system/app/XiaomiModemDebugService
+/system/priv-app/Tag
+/system/priv-app/CallLogBackup
+/system/app/MiuiAudioMonitor
+/system/app/GooglePrintRecommendationService
+/system/app/CatcherPatch
+/system/app/MiuiBugReport
+/system/app/CatchLog
+/system/app/ModemLog
+
+/system/product/priv-app/GoogleServicesFramework
+/system/product/priv-app/ConfigUpdater
+/system/product/priv-app/GmsCore
+/system/product/priv-app/GoogleOneTimeInitializer
 "
 sdk_determination() {
   if [ $sdk -ge $min_sdk ] ; then
