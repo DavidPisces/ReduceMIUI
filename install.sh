@@ -35,6 +35,7 @@ REPLACE="
 /system/app/mid_test
 /system/app/MiuiVpnSdkManager
 /system/app/BookmarkProvider
+/system/app/CarrierDefaultApp
 /system/app/FidoAuthen
 /system/app/FidoClient
 /system/app/FidoCryptoService
