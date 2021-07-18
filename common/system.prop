@@ -1,4 +1,0 @@
-# 对应系统的build.prop
-# 这个文件将被 resetprop 读取
-# 示例: 改变 dpi
-# ro.sf.lcd_density=320
