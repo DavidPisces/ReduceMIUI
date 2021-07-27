@@ -7,9 +7,9 @@ POSTFSDATA=true
 # 如果您需要late_start服务脚本（service.sh），请将其设置为true
 LATESTARTSERVICE=true
 # 模块版本号
-version="2.3 Beta"
+version="2.4"
 # 模块精简列表更新日期
-update_date="21.7.18"
+update_date="21.7.27"
 # Zram调整配置(默认关闭)
 enable_zram=false
 # SDK判断
@@ -127,6 +127,10 @@ clean_wifi_logs() {
     stop cnss_diag
     ui_print "-! 正在清除MIUI WiFi log"
     rm -rf /data/vendor/wlan_logs/*
+    setprop sys.miui.ndcd off
+    touch /data/adb/modules_update/Reducemiui/system.prop
+    echo "sys.miui.ndcd=off" >/data/adb/modules_update/Reducemiui/system.prop
+  fi
 }
 
 on_install
