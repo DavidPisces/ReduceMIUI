@@ -17,7 +17,7 @@ sdk=$(grep_prop ro.build.version.sdk)
 # 所要求最小版本
 min_sdk=29
 Enable_determination=false
-# chattr强制阻止log写入(默认关闭，需要busybox)
+# 禁用miui日志
 is_clean_logs=true
 # 精简列表
 REPLACE="
@@ -121,16 +121,12 @@ on_install() {
 
 clean_wifi_logs() {
   if [ $is_clean_logs = true ]; then
+    ui_print "- 正在停止tcpdump"
+    stop tcpdump
+    ui_print "- 正在停止cnss_diag"
+    stop cnss_diag
     ui_print "-! 正在清除MIUI WiFi log"
     rm -rf /data/vendor/wlan_logs/*
-    ui_print "-! 正在锁定log文件阻止读写"
-    chattr +i /data/vendor/wlan_logs/
-    ui_print "-! 已锁定WiFi日志文件"
-  fi
-    touch /storage/emulated/0/MIUI/uninstall_ReduceMIUI.sh
-    echo -e "#! /sbin/sh \nchattr -i /data/vendor/wlan_logs/ \nrm -rf /data/adb/modules/Reducemiui/ \necho '-! 卸载完成，请重启手机' " > /storage/emulated/0/MIUI/uninstall_ReduceMIUI.sh
-    ui_print "-! 卸载脚本创建完成"
-    ui_print "- 卸载时请使用/storage/emulated/0/MIUI/uninstall_ReduceMIUI.sh卸载模块"
 }
 
 on_install
