@@ -16,8 +16,8 @@
 - 精简系统进程
 - Remove a part of system app
 
-- 调整MIUI的Zram上限和使用
-- Adjust MIUI zram
+- 移除部分MIUI系统日志
+- Remove a part of miui logs
 
   ###### 以下是模块的参数调整和注意事项
   ###### These are variables for the module and precautions
@@ -33,7 +33,6 @@
 
   * 模块的版本号是由install.sh自动写入，无需在module.prop重复手动加入
 
-  * 模块默认调整Zram上限是2801，有需要请自行调整mcd_default.conf(个人不建议在大内存手机上使用)
 
 
 
@@ -52,11 +51,7 @@
 
 
 > * true为开启，false为关闭
-
-> enable_zram
 >
-> Zram调整配置，默认关闭。
-
 > min_sdk
 >
 > Android版本判断要求最小SDK
@@ -64,3 +59,7 @@
 > Enable_determination
 >
 > Android判断配置
+>
+> is_clean_logs
+>
+> 启用移除MIUI日志

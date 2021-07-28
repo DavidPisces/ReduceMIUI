@@ -1,3 +1,4 @@
+#!/bin/sh
 # ReduceMIUI 精简计划 配置文件
 # Made by @雄氏老方
 # 如果您需要加载system.prop，请将其设置为true
@@ -5,13 +6,11 @@ PROPFILE=true
 # 如果您需要post-fs-data脚本（post-fs-data.sh），请将其设置为true
 POSTFSDATA=true
 # 如果您需要late_start服务脚本（service.sh），请将其设置为true
-LATESTARTSERVICE=true
+LATESTARTSERVICE=false
 # 模块版本号
-version="2.4"
+version="2.5"
 # 模块精简列表更新日期
 update_date="21.7.27"
-# Zram调整配置(默认关闭)
-enable_zram=false
 # SDK判断
 sdk=$(grep_prop ro.build.version.sdk)
 # 所要求最小版本
@@ -95,21 +94,13 @@ sdk_determination() {
     ui_print "- ! 安装终止"
   fi
 }
-custom_setttings() {
+costom_setttings() {
   # 版本判断启用配置
   if [ $Enable_determination = true ]; then
     sdk_determination
   fi
   # 写入更新日期
   echo -n "$update_date" >>$TMPDIR/module.prop
-  # Zram调整配置
-  if [ $enable_zram = false ]; then
-    rm -f /data/adb/modules_update/Reducemiui/system/etc/mcd_default.conf
-    ui_print "- Zram配置未启用，若使用配置文件请修改模块配置文件install.sh"
-  else
-    echo -n "(已启用Zram调整)" >>$TMPDIR/module.prop
-    ui_print "- Zram配置已启用，若关闭配置文件请修改模块配置文件install.sh"
-  fi
   # 写入版本号
   echo -e "\nversion=$version" >>$TMPDIR/module.prop
 }
@@ -139,5 +130,5 @@ ui_print "  "
 ui_print "  Reduce MIUI Project"
 ui_print "  "
 ui_print "  "
-custom_setttings
+costom_setttings
 clean_wifi_logs
