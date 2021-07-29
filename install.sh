@@ -1,6 +1,8 @@
 #!/bin/sh
 # ReduceMIUI 精简计划 配置文件
 # Made by @雄氏老方
+# 跳过挂载
+SKIPMOUNT=false
 # 如果您需要加载system.prop，请将其设置为true
 PROPFILE=true
 # 如果您需要post-fs-data脚本（post-fs-data.sh），请将其设置为true
@@ -59,6 +61,7 @@ REPLACE="
 /system/app/MiPlayClient
 /system/app/greenguard
 /system/app/QColor
+/system/app/mab
 /system/priv-app/MiRcs
 /system/priv-app/MiGameCenterSDKService
 /system/app/TranslationService
@@ -123,7 +126,13 @@ clean_wifi_logs() {
     echo "sys.miui.ndcd=off" >/data/adb/modules_update/Reducemiui/system.prop
   fi
 }
+uninstall_useless_app() {
+  ui_print "- 正在卸载智能服务"
+  pm uninstall --user 0 com.miui.systemAdSolution
+  ui_print "- 正在卸载Analytics"
+  pm uninstall --user 0 com.miui.analytics
 
+}
 on_install
 ui_print "  "
 ui_print "  "
@@ -132,3 +141,4 @@ ui_print "  "
 ui_print "  "
 costom_setttings
 clean_wifi_logs
+uninstall_useless_app
