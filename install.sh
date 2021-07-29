@@ -6,13 +6,9 @@ SKIPMOUNT=false
 # 如果您需要加载system.prop，请将其设置为true
 PROPFILE=true
 # 如果您需要post-fs-data脚本（post-fs-data.sh），请将其设置为true
-POSTFSDATA=true
+POSTFSDATA=false
 # 如果您需要late_start服务脚本（service.sh），请将其设置为true
-LATESTARTSERVICE=false
-# 模块版本号
-version="2.5"
-# 模块精简列表更新日期
-update_date="21.7.27"
+LATESTARTSERVICE=true
 # SDK判断
 sdk=$(grep_prop ro.build.version.sdk)
 # 所要求最小版本
@@ -89,28 +85,38 @@ REPLACE="
 /vendor/app/GFManager/
 /vendor/app/GFTest/
 "
-sdk_determination() {
-  if [ $sdk -ge $min_sdk ]; then
-    ui_print "- 当前SDK为：$sdk"
-  else
-    abort "- 当前SDK为：$sdk，不符合要求最低SDK：$min_sdk"
-    ui_print "- ! 安装终止"
-  fi
+pre_install() {
+  # 模块配置
+  module_id=Reducemiui
+  module_name="Reduce MIUI Project"
+  module_author="雄氏老方"
+  module_minMagisk=19000
+  module_description="尽可能精简系统服务 更新日期："
+  # 模块版本号
+  version="2.5"
+  # 模块精简列表更新日期
+  update_date="21.7.29"
+  ui_print "- 提取模块文件"
+  touch $TMPDIR/module.prop
+  unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
+  # 写入模块信息
+  echo -e "id=$module_id\nname=$module_name\nauthor=$module_author\nminMagisk=$module_minMagisk\n" >$TMPDIR/module.prop
 }
+
 costom_setttings() {
   # 版本判断启用配置
   if [ $Enable_determination = true ]; then
-    sdk_determination
+    if [ $sdk -ge $min_sdk ]; then
+      ui_print "- 当前SDK为：$sdk"
+    else
+      abort "- 当前SDK为：$sdk，不符合要求最低SDK：$min_sdk"
+      ui_print "- ! 安装终止"
+    fi
   fi
   # 写入更新日期
-  echo -n "$update_date" >>$TMPDIR/module.prop
+  echo -n "description=$module_description$update_date" >> $TMPDIR/module.prop
   # 写入版本号
   echo -e "\nversion=$version" >>$TMPDIR/module.prop
-}
-
-on_install() {
-  ui_print "- 提取模块文件"
-  unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
 }
 
 clean_wifi_logs() {
@@ -127,13 +133,13 @@ clean_wifi_logs() {
   fi
 }
 uninstall_useless_app() {
-  ui_print "- 正在卸载智能服务"
-  pm uninstall --user 0 com.miui.systemAdSolution
-  ui_print "- 正在卸载Analytics"
-  pm uninstall --user 0 com.miui.analytics
-
+  ui_print "- 正在禁用智能服务"
+  pm disable com.miui.systemAdSolution
+  ui_print "- 正在禁用Analytics"
+  pm disable com.miui.analytics
 }
-on_install
+
+pre_install
 ui_print "  "
 ui_print "  "
 ui_print "  Reduce MIUI Project"

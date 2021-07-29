@@ -67,13 +67,12 @@ $BOOTMODE && boot_actions || recovery_actions
 
 # 提取公共文件
 unzip -o "$ZIPFILE" module.prop -d $TMPDIR >&2
-[ ! -f $TMPDIR/module.prop ] && abort "! 从 zip 中提取文件失败!"
 
 $BOOTMODE && MODDIRNAME=modules_update || MODDIRNAME=modules
 MODULEROOT=$NVBASE/$MODDIRNAME
-MODID=`grep_prop id $TMPDIR/module.prop`
+MODID=Reducemiui
 MODPATH=$MODULEROOT/$MODID
-MODNAME=`grep_prop name $TMPDIR/module.prop`
+MODNAME="Reduce MIUI Project"
 
 # 创建模块路径
 rm -rf $MODPATH 2>/dev/null
