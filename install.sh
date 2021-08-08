@@ -58,12 +58,13 @@ REPLACE="
 /system/app/greenguard
 /system/app/QColor
 /system/app/mab
+/system/app/HybridAccessory/
 /system/priv-app/MiRcs
 /system/priv-app/MiGameCenterSDKService
 /system/app/TranslationService
 /system/priv-app/dpmserviceapp
 /system/priv-app/EmergencyInfo
-/system/priv-app/MiService
+/system/priv-app/MIService
 /system/priv-app/UserDictionaryProvider
 /system/priv-app/ONS
 /system/priv-app/MusicFX
@@ -95,7 +96,7 @@ pre_install() {
   # 模块版本号
   version="2.5"
   # 模块精简列表更新日期
-  update_date="21.7.29"
+  update_date="21.8.8"
   ui_print "- 提取模块文件"
   touch $TMPDIR/module.prop
   unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2

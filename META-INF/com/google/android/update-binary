@@ -108,11 +108,9 @@ if is_legacy_script; then
 
   # 设置权限
   ui_print "- 正在设置权限，这需要一点时间，请坐和放宽"
-  ui_print "- 不要着急，在干活啦"
   set_permissions
 else
   print_modname
-
   unzip -o "$ZIPFILE" customize.sh -d $MODPATH >&2
 
   if ! grep -q '^SKIPUNZIP=1$' $MODPATH/customize.sh 2>/dev/null; then
@@ -173,6 +171,6 @@ cd /
 $BOOTMODE || recovery_cleanup
 rm -rf $TMPDIR
 
-ui_print "- 完事了！"
+ui_print "- 完成！"
 ui_print "- 请重启手机以生效"
 exit 0
