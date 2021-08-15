@@ -38,19 +38,37 @@
 
 ##### 参数设置
 
+> module_id
+>
+> 模块的id，可自定义
+>
+> module_name
+>
+> 模块的名称，在Magisk内显示的名称
+>
+> module_author
+>
+> 模块的作者
+>
+> module_minMagisk
+>
+> 模块所需要的最小Magisk版本
+>
+> module_description
+>
+> 模块在Magisk页面的描述
+>
 > version
 >
 > 模块版本号，相当于module.prop的version变量
-
-
-
+>
 > update_date
 >
 > 模块精简列表更新日期，会自动加入模块描述
 
 
 
-> * true为开启，false为关闭
+> * 在以下参数中true为开启，false为关闭
 >
 > min_sdk
 >
