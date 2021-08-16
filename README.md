@@ -24,14 +24,7 @@
 
   ##### 注意事项
   
-  * 模块的主要调整在install.sh,修改install即可,不要对模块的module.prop做过多修改,可能导致脚本出现问题
-    
-    例如：
-
-    * 随意增添空行
-    * 重复增加version=xx 版本号
-
-  * 模块的版本号是由install.sh自动写入，无需在module.prop重复手动加入
+  * 模块的主要调整在install.sh,修改install.sh的各种参数即可，module.prop由install.sh自动生成
 
 
 
