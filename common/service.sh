@@ -58,5 +58,10 @@ echo "0" > /proc/sys/kernel/sched_schedstats
 # 调整虚拟内存统计间隔 (默认为1, 也就是1秒)
 echo "20" > /proc/sys/vm/stat_interval
 
-# 禁用Analytics
+sleep 15
+# 禁用MSA和Analytics
+pm disable com.miui.systemAdSolution
 pm disable com.miui.analytics
+
+# 自动以Everything模式优化桌面
+cmd package compile -m everything com.miui.home
