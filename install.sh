@@ -92,11 +92,11 @@ pre_install() {
   module_name="Reduce MIUI Project"
   module_author="雄氏老方"
   module_minMagisk=19000
-  module_description="尽可能精简系统服务 更新日期："
+  module_description="精简系统服务，关闭部分系统日志 更新日期："
   # 模块版本号
-  version="2.5"
+  version="2.6"
   # 模块精简列表更新日期
-  update_date="21.8.8"
+  update_date="21.9.21"
   ui_print "- 提取模块文件"
   touch $TMPDIR/module.prop
   unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
@@ -126,6 +126,8 @@ clean_wifi_logs() {
     stop tcpdump
     ui_print "- 正在停止cnss_diag"
     stop cnss_diag
+    ui_print "- 正在停止logd"
+    stop logd
     ui_print "-! 正在清除MIUI WiFi log"
     rm -rf /data/vendor/wlan_logs/*
     setprop sys.miui.ndcd off
@@ -140,6 +142,11 @@ uninstall_useless_app() {
   pm disable com.miui.analytics
 }
 
+dex2oat_app(){
+  ui_print "- 为保障流畅，正在优化系统桌面(Everything)，需要一点时间...."
+  cmd package compile -m everything com.miui.home
+  ui_print "- 优化完成"
+}
 pre_install
 ui_print "  "
 ui_print "  "
@@ -149,3 +156,4 @@ ui_print "  "
 costom_setttings
 clean_wifi_logs
 uninstall_useless_app
+dex2oat_app
