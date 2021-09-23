@@ -19,6 +19,12 @@
 - 移除部分MIUI系统日志
 - Remove a part of miui logs
 
+- 自动冻结MSA Analytics
+
+- 自动以Everything模式优化桌面
+
+- 屏蔽Analytics发送数据的部分域名
+
   ###### 以下是模块的参数调整和注意事项
   ###### These are variables for the module and precautions
 
