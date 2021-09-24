@@ -225,16 +225,14 @@ run_two() {
     app_path="$(pm path ${app_2} | grep -v '/data/app/' | sed 's/package://g')"
     File_Dir="${MODPATH}${app_path%/*}"
     [ -z "${app_path}" ] && echo "[!] >> ${app_1} << 为data应用: 或是经过应用商店更新"
-    if [ ! -d "${File_Dir}" ]; then
-      num="$(($num+1))"
-      echo "- ${num}.REPLACE: ${app_1} (${app_2})"
-      set_mktouch_authority "${File_Dir}"
-      echo "名称:(${app_1})" >> ${MODPATH}/log.md
-      echo "包名:(${app_2})" >> ${MODPATH}/log.md
-      echo "原始路径: ${app_path}" >> ${MODPATH}/log.md
-      echo "模块路径: $(echo ${File_Dir} | sed 's/modules_update/modules/g')" >> ${MODPATH}/log.md
-      echo "" >>${MODPATH}/log.md
-    fi
+    num="$(($num+1))"
+    echo "- ${num}.REPLACE: ${app_1} (${app_2})"
+    set_mktouch_authority "${File_Dir}"
+    echo "名称:(${app_1})" >> ${MODPATH}/log.md
+    echo "包名:(${app_2})" >> ${MODPATH}/log.md
+    echo "原始路径: ${app_path}" >> ${MODPATH}/log.md
+    echo "模块路径: $(echo ${File_Dir} | sed 's/modules_update/modules/g')" >> ${MODPATH}/log.md
+    echo "" >>${MODPATH}/log.md
   done
   echo "$(date '+%Y/%m/%d %T')" >> ${MODPATH}/log.md
   [ -d "${MODPATH}/product" ] && mv ${MODPATH}/product ${MODPATH}/system/
