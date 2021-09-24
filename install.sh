@@ -10,7 +10,7 @@ POSTFSDATA=false
 # 如果您需要late_start服务脚本（service.sh），请将其设置为true
 LATESTARTSERVICE=true
 # SDK判断
-#sdk=$(grep_prop ro.build.version.sdk)
+sdk=$(grep_prop ro.build.version.sdk)
 # 所要求最小版本
 min_sdk=29
 Enable_determination=false
