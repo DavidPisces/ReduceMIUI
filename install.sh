@@ -19,9 +19,9 @@ is_clean_logs=true
 
 # 精简数量累计
 num=0
-# 可编辑文件 命名为*.sh是为了编辑/查看时一目了然
-Compatible_with_older_versions="$(cat ${TMPDIR}/common/兼容精简.sh)"
-Package_Name_Reduction="$(cat ${TMPDIR}/common/包名精简.sh)"
+# 可编辑文件 命名为*.prop是为了编辑/查看时一目了然
+Compatible_with_older_versions="$(cat ${TMPDIR}/common/兼容精简.prop)"
+Package_Name_Reduction="$(cat ${TMPDIR}/common/包名精简.prop)"
 
 run_one() {
   ui_print " "
@@ -37,7 +37,7 @@ run_one() {
       do
         case ${j} in
           *.apk)
-            num="$(($num+1))"
+            num="$((${num}+1))"
             set_mktouch_authority "${MODPATH}/${i}"
             ui_print "- ${num}.REPLACE: ${i}/.replace"
             echo "[${num}] REPLACE: ${i}/.replace" >> ${MODPATH}/log.md
@@ -62,7 +62,7 @@ run_two() {
     File_Dir="${MODPATH}${app_path%/*}"
     [ -z "${app_path}" ] && echo "[!] >> ${app_1} << 为data应用: 或是经过应用商店更新"
     if [ ! -d "$File_Dir" ]; then
-      num="$(($num+1))"
+      num="$((${num}+1))"
       echo "- ${num}.REPLACE: ${app_1} (${app_2})"
       set_mktouch_authority "${File_Dir}"
       echo "名称:(${app_1})" >> ${MODPATH}/log.md
@@ -90,7 +90,7 @@ retain_the_original_path() {
     echo "- $(date '+%Y/%m/%d %T'): [原有路径保留]" >> ${MODPATH}/log.md
     for original_path in ${Already_exists}
     do
-      num="$(($num+1))"
+      num="$((${num}+1))"
       ui_print "- ${num}.REPLACE: /system/${original_path}"
       echo "[${num}] update: /system/${original_path}/.replace" >> ${MODPATH}/log.md
       set_mktouch_authority "${MODPATH}/system/${original_path}"
@@ -161,7 +161,7 @@ costom_setttings() {
 }
 
 clean_wifi_logs() {
-  if [ $is_clean_logs = true ]; then
+  if [ "${is_clean_logs}" == "true" ]; then
     ui_print "- 正在停止tcpdump"
     stop tcpdump
     ui_print "- 正在停止cnss_diag"
@@ -178,24 +178,17 @@ clean_wifi_logs() {
 
 uninstall_useless_app() {
   ui_print "- 正在禁用智能服务"
-  pm disable com.miui.systemAdSolution
+  pm disable com.miui.systemAdSolution >/dev/null && ui_print "- pm disable com.miui.systemAdSolution: Success" || ui_print "- 不存在应用: com.miui.systemAdSolution 或已被精简"
   ui_print "- 正在禁用Analytics"
-  pm disable com.miui.analytics
+  pm disable com.miui.analytics >/dev/null && ui_print "- pm disable com.miui.analytics: Success" || ui_print "- 不存在应用: com.miui.analytics 或已被精简"
 }
 
 dex2oat_app(){
-  dex2ota_list="
-  com.miui.home
-  com.android.settings
-  com.miui.notification
-  com.android.systemui
-  com.miui.miwallpaper
-  com.xiaomi.misettings
-  com.miui.personalassistant"
-  ui_print "- 为保障流畅，执行dex2ota(Everything)优化，需要一点时间..."
-  for app_list in ${dex2ota_list}
+  dex2oat_list="$(cat ${TMPDIR}/common/dex2oat.prop)"
+  ui_print "- 为保障流畅，执行dex2oat(Everything)优化，需要一点时间..."
+  for app_list in ${dex2oat_list}
   do
-    cmd package compile -m everything ${app_list} >/dev/null && echo "- ${app_list}: Success"
+    cmd package compile -m everything ${app_list} >/dev/null && ui_print "- ${app_list}: Success"
   done
   ui_print "- 优化完成"
 }
