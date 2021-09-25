@@ -1,9 +1,26 @@
 #!/system/bin/sh
 MODDIR=${0%/*}
-sleep 15
+
+sdcard_rw() {
+	local test_file="/sdcard/Android/.Reducemiui_test"
+	touch ${test_file}
+	while [ ! -f "$test_file" ]; do
+		touch ${test_file}
+		sleep 1
+	done
+	rm $test_file
+}
+
+# 判断系统是否完全启动
+until [ "$(getprop sys.boot_completed)" -eq "1" ]; do
+	sleep 2
+done
+# 判断用户sdcard空间是否可读写
+sdcard_rw
+
+# Run
 stop tcpdump
 stop cnss_diag
-sleep 30
 stop logd
 rm -rf /data/vendor/charge_logger/
 rm -rf /data/vendor/wlan_logs/
