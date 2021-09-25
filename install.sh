@@ -158,8 +158,19 @@ uninstall_useless_app() {
 }
 
 dex2oat_app(){
-  ui_print "- 为保障流畅，正在优化系统桌面(Everything)，需要一点时间...."
-  cmd package compile -m everything com.miui.home
+  dex2ota_list="
+  com.miui.home
+  com.android.settings
+  com.miui.notification
+  com.android.systemui
+  com.miui.miwallpaper
+  com.xiaomi.misettings
+  com.miui.personalassistant"
+  ui_print "- 为保障流畅，执行dex2ota(Everything)优化，需要一点时间..."
+  for app_list in ${dex2ota_list}
+  do
+    cmd package compile -m everything ${app_list} >/dev/null && echo "- ${app_list}: Success"
+  done
   ui_print "- 优化完成"
 }
 
