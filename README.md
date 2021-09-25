@@ -13,17 +13,15 @@
 
 ##### 主要功能 Function：
 
-- 精简系统进程
-- Remove a part of system app
+- 精简系统进程，可以根据精简配置自行调整
 
 - 移除部分MIUI系统日志
-- Remove a part of miui logs
 
 - 自动冻结MSA Analytics
 
-- 自动以Everything模式优化桌面
+- 自动以Everything模式优化部分系统App，可以根据配置文件自行调整
 
-- 屏蔽Analytics发送数据的部分域名
+- 使用hosts屏蔽Analytics发送数据的部分域名
 
   ###### 以下是模块的参数调整和注意事项
   ###### These are variables for the module and precautions
@@ -34,49 +32,38 @@
 
 
 
-
 ##### 参数设置
 
 > module_id
->
 > 模块的id，可自定义
->
+
 > module_name
->
 > 模块的名称，在Magisk内显示的名称
->
+
 > module_author
->
 > 模块的作者
->
+
 > module_minMagisk
->
 > 模块所需要的最小Magisk版本
->
+
 > module_description
->
 > 模块在Magisk页面的描述
->
+
 > version
->
 > 模块版本号，相当于module.prop的version变量
->
+
 > update_date
->
-> 模块精简列表更新日期，会自动加入模块描述
+> 模块更新日期，会自动加入模块描述
 
 
 
-> * 在以下参数中true为开启，false为关闭
->
+ * 在以下参数中true为开启，false为关闭
+
 > min_sdk
->
 > Android版本判断要求最小SDK
->
+
 > Enable_determination
->
-> Android判断配置
->
+> Android版本判断配置
+
 > is_clean_logs
->
 > 启用移除MIUI日志

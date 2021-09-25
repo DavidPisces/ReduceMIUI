@@ -77,6 +77,7 @@ echo "20" > /proc/sys/vm/stat_interval
 
 sleep 15
 # 禁用MSA和Analytics
+
 pm disable com.miui.systemAdSolution >/dev/null
 pm disable com.miui.analytics >/dev/null
 
@@ -86,3 +87,4 @@ for app_list in ${dex2oat_list}
 do
   cmd package compile -m everything ${app_list} >/dev/null
 done
+
