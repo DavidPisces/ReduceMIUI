@@ -38,7 +38,7 @@ run_one() {
       do
         case ${j} in
           *.apk)
-            num="$(($num+1))"
+            num="$((${num}+1))"
             set_mktouch_authority "${MODPATH}/${i}"
             ui_print "- ${num}.REPLACE: ${i}/.replace"
             echo "[${num}] REPLACE: ${i}/.replace" >> ${MODPATH}/log.md
@@ -63,7 +63,7 @@ run_two() {
     File_Dir="${MODPATH}${app_path%/*}"
     [ -z "${app_path}" ] && echo "[!] >> ${app_1} << 为data应用: 或是经过应用商店更新"
     if [ ! -d "$File_Dir" ]; then
-      num="$(($num+1))"
+      num="$((${num}+1))"
       echo "- ${num}.REPLACE: ${app_1} (${app_2})"
       set_mktouch_authority "${File_Dir}"
       echo "名称:(${app_1})" >> ${MODPATH}/log.md
@@ -91,7 +91,7 @@ retain_the_original_path() {
     echo "- $(date '+%Y/%m/%d %T'): [原有路径保留]" >> ${MODPATH}/log.md
     for original_path in ${Already_exists}
     do
-      num="$(($num+1))"
+      num="$((${num}+1))"
       ui_print "- ${num}.REPLACE: /system/${original_path}"
       echo "[${num}] update: /system/${original_path}/.replace" >> ${MODPATH}/log.md
       set_mktouch_authority "${MODPATH}/system/${original_path}"
@@ -145,7 +145,7 @@ set_mktouch_authority() {
 
 costom_setttings() {
   # 版本判断启用配置
-  if [ $Enable_determination = true ]; then
+  if [ "$Enable_determination" == "true" ]; then
     if [ $sdk -ge $min_sdk ]; then
       ui_print "- 当前SDK为：$sdk"
     else
@@ -162,7 +162,7 @@ costom_setttings() {
 }
 
 clean_wifi_logs() {
-  if [ $is_clean_logs = true ]; then
+  if [ "$is_clean_logs" == "true" ]; then
     ui_print "- 正在停止tcpdump"
     stop tcpdump
     ui_print "- 正在停止cnss_diag"
@@ -171,7 +171,7 @@ clean_wifi_logs() {
     stop logd
     ui_print "- 正在清除MIUI WiFi log"
     rm -rf /data/vendor/wlan_logs/*
-    setprop sys.miui.ndcd off
+    setprop sys.miui.ndcd off >/dev/null
     touch /data/adb/modules_update/Reducemiui/system.prop
     echo "sys.miui.ndcd=off" >/data/adb/modules_update/Reducemiui/system.prop
   fi
@@ -188,7 +188,7 @@ dex2oat_app(){
   ui_print "- 为保障流畅，执行dex2oat(Everything)优化，需要一点时间..."
   for app_list in ${dex2oat_list}
   do
-    cmd package compile -m everything ${app_list} >/dev/null && echo "- ${app_list}: Success"
+    cmd package compile -m everything ${app_list} >/dev/null && ui_print "- ${app_list}: Success"
   done
   ui_print "- 优化完成"
 }

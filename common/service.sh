@@ -77,22 +77,14 @@ echo "20" > /proc/sys/vm/stat_interval
 
 sleep 15
 # 禁用MSA和Analytics
-pm disable com.miui.systemAdSolution
-pm disable com.miui.analytics
 
-# 自动以Everything模式优化桌面
+pm disable com.miui.systemAdSolution >/dev/null
+pm disable com.miui.analytics >/dev/null
 
-dex2oat(){
- dex2oat_app="
-  com.miui.home
-  com.android.settings
-  com.miui.notification
-  com.android.systemui
-  com.miui.miwallpaper
-  com.xiaomi.misettings
-  com.miui.personalassistant"	
-  for app_list in ${dex2oat_app}
-  do
-    cmd package compile -m everything ${app_list} >/dev/null && echo "- ${app_list}: Success"
-  done
-}
+# 以Everything模式优化系统应用
+dex2oat_list="$(cat ${MODDIR}/dex2oat.prop)"
+for app_list in ${dex2oat_list}
+do
+  cmd package compile -m everything ${app_list} >/dev/null
+done
+
