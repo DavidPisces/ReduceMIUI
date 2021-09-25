@@ -19,13 +19,14 @@ is_clean_logs=true
 
 # 精简数量累计
 num=0
-#可编辑文件 命名为*.sh是为了编辑/查看时一目了然
+# 可编辑文件 命名为*.sh是为了编辑/查看时一目了然
 Compatible_with_older_versions="$(cat ${TMPDIR}/common/兼容精简.sh)"
 Package_Name_Reduction="$(cat ${TMPDIR}/common/包名精简.sh)"
 
 run_one() {
   ui_print " "
   ui_print "----------[ Run: 兼容精简 ]"
+  echo "- $(date '+%Y/%m/%d %T'): [兼容精简]" >> ${MODPATH}/log.md
   ui_print "- 如果这里空空如也"
   ui_print "- 说明你不是远古版本的MIUI"
   for i in ${Compatible_with_older_versions}
@@ -44,6 +45,7 @@ run_one() {
       done
     fi
   done
+  echo "- [done]" >> ${MODPATH}/log.md
   ui_print "----------[ done ]"
   ui_print " "
 }
@@ -51,6 +53,7 @@ run_one() {
 run_two() {
   ui_print " "
   ui_print "----------[ Run: 包名精简 ]"
+    echo "- $(date '+%Y/%m/%d %T'): [包名精简]" >> ${MODPATH}/log.md
     appinfo -d " " -o ands,pn -pn ${Package_Name_Reduction} 2>/dev/null | while read line; do
     app_1="$(echo ${line} | awk '{print $1}')"
     app_2="$(echo ${line} | awk '{print $2}')"
@@ -68,11 +71,33 @@ run_two() {
       echo "" >> ${MODPATH}/log.md
     fi
   done
-  echo "$(date '+%Y/%m/%d %T')" >> ${MODPATH}/log.md
   [ -d "${MODPATH}/product" ] && mv ${MODPATH}/product ${MODPATH}/system/
   [ -d "${MODPATH}/system_ext" ] && mv ${MODPATH}/system_ext ${MODPATH}/system/
+  echo "- [done]" >> ${MODPATH}/log.md
   ui_print "----------[ done ]"
   ui_print " "
+}
+
+retain_the_original_path() {
+  if [ "$(find /data/adb/modules*/Reducemiui -name '.replace')" != "" ]; then
+    ui_print " "
+    ui_print "----------[ Run: 原有路径保留 ]"
+    ui_print "- [&]: 已安装过模块 重新刷模块会保留原有精简路径"
+    Already_exists="$(find /data/adb/modules*/Reducemiui -name '.replace' | awk -F '/.replace' '{print $1}' | awk -F '/system/' '{print $2}')"
+    log_md="$(find /data/adb/modules*/Reducemiui -name 'log.md')"
+    cp -r ${log_md} ${MODPATH}
+    echo "- $(date '+%Y/%m/%d %T'): [原有路径保留]" >> ${MODPATH}/log.md
+    for original_path in ${Already_exists}
+    do
+      num="$(($num+1))"
+      ui_print "- ${num}.REPLACE: /system/${original_path}"
+      echo "[${num}] update: /system/${original_path}/.replace" >> ${MODPATH}/log.md
+      set_mktouch_authority "${MODPATH}/system/${original_path}"
+    done
+    echo "- [done]" >> ${MODPATH}/log.md
+    ui_print "----------[ done ]"
+    ui_print " "
+  fi
 }
 
 pre_install() {
@@ -184,5 +209,6 @@ costom_setttings
 clean_wifi_logs
 uninstall_useless_app
 dex2oat_app
+retain_the_original_path
 run_one
 run_two
