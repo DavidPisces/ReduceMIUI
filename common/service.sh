@@ -81,7 +81,7 @@ pm disable com.miui.systemAdSolution >/dev/null
 pm disable com.miui.analytics >/dev/null
 
 # 以Everything模式优化系统应用
-dex2oat_list="$(cat ${MODDIR}/dex2.prop)"
+dex2oat_list="$(cat ${MODDIR}/dex2oat.prop)"
 for app_list in ${dex2oat_list}
 do
   cmd package compile -m everything ${app_list} >/dev/null

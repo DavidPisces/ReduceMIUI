@@ -16,13 +16,14 @@ min_sdk=29
 Enable_determination=false
 # 禁用miui日志
 is_clean_logs=true
-
 # 精简数量累计
 num=0
 # 可编辑文件 命名为*.prop是为了编辑/查看时一目了然
 Compatible_with_older_versions="$(cat ${TMPDIR}/common/兼容精简.prop)"
 Package_Name_Reduction="$(cat ${TMPDIR}/common/包名精简.prop)"
+dex2oat_list="$(cat ${TMPDIR}/common/dex2oat.prop)"
 
+# 包名精简
 run_one() {
   ui_print " "
   ui_print "----------[ Run: 兼容精简 ]"
@@ -110,9 +111,9 @@ pre_install() {
   module_minMagisk=19000
   module_description="精简系统服务，关闭部分系统日志 更新日期："
   # 模块版本号
-  version="2.6"
+  version="2.7"
   # 模块精简列表更新日期
-  update_date="21.9.21"
+  update_date="21.9.25"
   ui_print "- 提取模块文件"
   touch $TMPDIR/module.prop
   unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
@@ -144,7 +145,7 @@ set_mktouch_authority() {
 
 costom_setttings() {
   # 版本判断启用配置
-  if [ $Enable_determination = true ]; then
+  if [ "$Enable_determination" == "true" ]; then
     if [ $sdk -ge $min_sdk ]; then
       ui_print "- 当前SDK为：$sdk"
     else
@@ -161,7 +162,7 @@ costom_setttings() {
 }
 
 clean_wifi_logs() {
-  if [ "${is_clean_logs}" == "true" ]; then
+  if [ "$is_clean_logs" == "true" ]; then
     ui_print "- 正在停止tcpdump"
     stop tcpdump
     ui_print "- 正在停止cnss_diag"
@@ -170,7 +171,7 @@ clean_wifi_logs() {
     stop logd
     ui_print "- 正在清除MIUI WiFi log"
     rm -rf /data/vendor/wlan_logs/*
-    setprop sys.miui.ndcd off
+    setprop sys.miui.ndcd off >/dev/null
     touch /data/adb/modules_update/Reducemiui/system.prop
     echo "sys.miui.ndcd=off" >/data/adb/modules_update/Reducemiui/system.prop
   fi
@@ -184,7 +185,6 @@ uninstall_useless_app() {
 }
 
 dex2oat_app(){
-  dex2oat_list="$(cat ${TMPDIR}/common/dex2oat.prop)"
   ui_print "- 为保障流畅，执行dex2oat(Everything)优化，需要一点时间..."
   for app_list in ${dex2oat_list}
   do

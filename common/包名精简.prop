@@ -99,9 +99,9 @@ com.android.stk
 #MiuiDaemon
 com.miui.daemon
 #投屏
-com.milink.service
+#com.milink.service
 #投屏服务
-com.xiaomi.miplay_client
+#com.xiaomi.miplay_client
 #安全守护服务
 com.miui.greenguard
 #智慧生活
@@ -116,7 +116,7 @@ com.android.providers.userdictionary
 com.android.dreams.phototable
 #Android 无障碍套件
 com.google.android.marvin.talkback
-#急救信息
+#急救信息(原生组件，MIUI几乎不需要)
 com.android.emergency
 #SystemHelper
 com.mobiletools.systemhelper
