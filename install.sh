@@ -179,9 +179,9 @@ clean_wifi_logs() {
 
 uninstall_useless_app() {
   ui_print "- 正在禁用智能服务"
-  pm disable com.miui.systemAdSolution
+  pm disable com.miui.systemAdSolution >/dev/null && ui_print "- pm disable com.miui.systemAdSolution: Success" || ui_print "- 不存在应用: com.miui.systemAdSolution 或已被精简"
   ui_print "- 正在禁用Analytics"
-  pm disable com.miui.analytics
+  pm disable com.miui.analytics >/dev/null && ui_print "- pm disable com.miui.analytics: Success" || ui_print "- 不存在应用: com.miui.analytics 或已被精简"
 }
 
 dex2oat_app(){
