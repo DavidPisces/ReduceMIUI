@@ -40,6 +40,7 @@ run_one() {
             num="$(($num+1))"
             set_mktouch_authority "${MODPATH}/${i}"
             ui_print "- ${num}.REPLACE: ${i}/.replace"
+            echo "[${num}] REPLACE: ${i}/.replace" >> ${MODPATH}/log.md
             ;;
         esac
       done
