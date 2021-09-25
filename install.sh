@@ -16,13 +16,14 @@ min_sdk=29
 Enable_determination=false
 # 禁用miui日志
 is_clean_logs=true
-
 # 精简数量累计
 num=0
-# 可编辑文件 命名为*.sh是为了编辑/查看时一目了然
-Compatible_with_older_versions="$(cat ${TMPDIR}/common/兼容精简.sh)"
-Package_Name_Reduction="$(cat ${TMPDIR}/common/包名精简.sh)"
+# 可编辑文件 命名为*.prop是为了编辑/查看时一目了然
+Compatible_with_older_versions="$(cat ${TMPDIR}/common/兼容精简.prop)"
+Package_Name_Reduction="$(cat ${TMPDIR}/common/包名精简.prop)"
+dex2oat_list="$(cat ${TMPDIR}/common/dex2oat.prop)"
 
+# 包名精简
 run_one() {
   ui_print " "
   ui_print "----------[ Run: 兼容精简 ]"
@@ -110,9 +111,9 @@ pre_install() {
   module_minMagisk=19000
   module_description="精简系统服务，关闭部分系统日志 更新日期："
   # 模块版本号
-  version="2.6"
+  version="2.7"
   # 模块精简列表更新日期
-  update_date="21.9.21"
+  update_date="21.9.25"
   ui_print "- 提取模块文件"
   touch $TMPDIR/module.prop
   unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
@@ -184,16 +185,8 @@ uninstall_useless_app() {
 }
 
 dex2oat_app(){
-  dex2ota_list="
-  com.miui.home
-  com.android.settings
-  com.miui.notification
-  com.android.systemui
-  com.miui.miwallpaper
-  com.xiaomi.misettings
-  com.miui.personalassistant"
-  ui_print "- 为保障流畅，执行dex2ota(Everything)优化，需要一点时间..."
-  for app_list in ${dex2ota_list}
+  ui_print "- 为保障流畅，执行dex2oat(Everything)优化，需要一点时间..."
+  for app_list in ${dex2oat_list}
   do
     cmd package compile -m everything ${app_list} >/dev/null && echo "- ${app_list}: Success"
   done

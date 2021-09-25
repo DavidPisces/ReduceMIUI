@@ -81,4 +81,18 @@ pm disable com.miui.systemAdSolution
 pm disable com.miui.analytics
 
 # 自动以Everything模式优化桌面
-cmd package compile -m everything com.miui.home
+
+dex2oat(){
+ dex2oat_app="
+  com.miui.home
+  com.android.settings
+  com.miui.notification
+  com.android.systemui
+  com.miui.miwallpaper
+  com.xiaomi.misettings
+  com.miui.personalassistant"	
+  for app_list in ${dex2oat_app}
+  do
+    cmd package compile -m everything ${app_list} >/dev/null && echo "- ${app_list}: Success"
+  done
+}
