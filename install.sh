@@ -16,6 +16,8 @@ min_sdk=29
 Enable_determination=false
 # 禁用miui日志
 is_clean_logs=true
+# 启用使用hosts文件屏蔽Analytics域名(如果您有使用屏蔽广告或者adhost之类的模块请设置为false)
+is_use_hosts=false
 # 精简数量累计
 num=0
 # 可编辑文件 命名为*.prop是为了编辑/查看时一目了然
@@ -120,6 +122,10 @@ pre_install() {
   echo -e "id=$module_id\nname=$module_name\nauthor=$module_author\nminMagisk=$module_minMagisk\n" >$TMPDIR/module.prop
   # 保留dex2oat.prop配置文件
   cp -r ${TMPDIR}/common/dex2oat.prop ${MODPATH}/
+  # hosts屏蔽analytics配置
+  if [ $is_use_hosts == "false" ]; then
+    rm -rf $MODPATH/system/etc/hosts
+  fi
 }
 
 inspect_file() {
