@@ -1,5 +1,5 @@
-127.0.0.1       localhost
-::1             ip6-localhost
+
+# Start Reducemiui hosts
 127.0.0.1      t1.market.xiaomi.com
 127.0.0.1      t2.market.xiaomi.com
 127.0.0.1      t3.market.xiaomi.com
@@ -8,3 +8,4 @@
 127.0.0.1      diagnosis.ad.xiaomi.com
 127.0.0.1      api.ad.xiaomi.com
 127.0.0.1      m.track.ad.xiaomi.com
+# End Reducemiui hosts

@@ -16,8 +16,6 @@ min_sdk=29
 Enable_determination=false
 # 禁用miui日志
 is_clean_logs=true
-# 启用使用hosts文件屏蔽Analytics域名(如果您有使用屏蔽广告或者adhost之类的模块请设置为false)
-is_use_hosts=false
 # 精简数量累计
 num=0
 # 可编辑文件 命名为*.prop是为了编辑/查看时一目了然
@@ -122,10 +120,6 @@ pre_install() {
   echo -e "id=$module_id\nname=$module_name\nauthor=$module_author\nminMagisk=$module_minMagisk\n" >$TMPDIR/module.prop
   # 保留dex2oat.prop配置文件
   cp -r ${TMPDIR}/common/dex2oat.prop ${MODPATH}/
-  # hosts屏蔽analytics配置
-  if [ $is_use_hosts == "false" ]; then
-    rm -rf $MODPATH/system/etc/hosts
-  fi
 }
 
 inspect_file() {
@@ -199,6 +193,28 @@ dex2oat_app() {
   ui_print "- 优化完成"
 }
 
+hosts_file() {
+  find_hosts="$(find /data/adb/modules*/*/system/etc -name 'hosts')"
+  if [ "$(echo "$find_hosts" | grep -v "Reducemiui")" != "" ]; then
+    echo "$find_hosts" | grep "Reducemiui" | xargs rm -rf
+    find_hosts="$(find /data/adb/modules*/*/system/etc -name 'hosts')"
+    have_an_effect_hosts="$(echo $find_hosts | awk '{print $NF}')"
+    if [ "$(cat "${have_an_effect_hosts}" | grep '# Start Reducemiui hosts')" == "" ]; then
+      cat "${TMPDIR}/common/hosts.txt" >> ${have_an_effect_hosts}
+    fi
+  else
+    mkdir -p ${MODPATH}/system/etc/
+    find_hosts="$(find /data/adb/modules*/Reducemiui/system/etc -name 'hosts')"
+    if [ ! -f "${find_hosts}" ]; then
+      cp -r /system/etc/hosts ${MODPATH}/system/etc/
+      cat ${TMPDIR}/common/hosts.txt >> ${MODPATH}/system/etc/hosts
+    else
+      cp -r ${find_hosts} ${MODPATH}/system/etc/
+    fi
+  fi
+}
+
+
 pre_install
 ui_print "  "
 ui_print "  "
@@ -212,3 +228,4 @@ dex2oat_app
 retain_the_original_path
 run_one
 run_two
+hosts_file
