@@ -77,7 +77,7 @@ run_two() {
   ui_print "----------[ done ]"
   ui_print " "
   # 清理安装缓存
-  rm -rf /data/adb/Reducemiui_bin
+  rm -rf ${bin_path}
 }
 
 retain_the_original_path() {
