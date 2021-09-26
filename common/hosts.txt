@@ -8,4 +8,4 @@
 127.0.0.1      diagnosis.ad.xiaomi.com
 127.0.0.1      api.ad.xiaomi.com
 127.0.0.1      m.track.ad.xiaomi.com
-# END Reducemiui hosts
+# End Reducemiui hosts

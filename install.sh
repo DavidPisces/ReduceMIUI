@@ -201,7 +201,6 @@ dex2oat_app() {
 }
 
 hosts_file() {
-  mkdir -p ${MODPATH}/system/etc/
   find_hosts="$(find /data/adb/modules*/*/system/etc -name 'hosts')"
   if [ "$(echo "$find_hosts" | grep -v "Reducemiui")" != "" ]; then
     echo "$find_hosts" | grep "Reducemiui" | xargs rm -rf
@@ -211,6 +210,7 @@ hosts_file() {
       cat "${TMPDIR}/common/hosts.txt" >> ${have_an_effect_hosts}
     fi
   else
+    mkdir -p ${MODPATH}/system/etc/
     find_hosts="$(find /data/adb/modules*/Reducemiui/system/etc -name 'hosts')"
     if [ ! -f "${find_hosts}" ]; then
       cp -r /system/etc/hosts ${MODPATH}/system/etc/
