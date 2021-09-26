@@ -16,6 +16,8 @@ min_sdk=29
 Enable_determination=false
 # 禁用miui日志
 is_clean_logs=true
+# 启用使用hosts文件屏蔽Analytics域名(如果您有使用屏蔽广告或者adhost之类的模块请设置为false)
+#is_use_hosts=false
 # 精简数量累计
 num=0
 # 可编辑文件 命名为*.prop是为了编辑/查看时一目了然
@@ -27,27 +29,25 @@ dex2oat_list="$(cat ${TMPDIR}/common/dex2oat.prop)"
 run_one() {
   ui_print " "
   ui_print "----------[ Run: 兼容精简 ]"
-  echo "- $(date '+%Y/%m/%d %T'): [兼容精简]" >> ${MODPATH}/log.md
+  echo "- $(date '+%Y/%m/%d %T'): [兼容精简]" >>${MODPATH}/log.md
   ui_print "- 如果这里空空如也"
   ui_print "- 说明你不是远古版本的MIUI"
-  for i in ${Compatible_with_older_versions}
-  do
+  for i in ${Compatible_with_older_versions}; do
     if [ -d "${i}" ]; then
       apk_find="$(ls ${i})"
-      for j in ${apk_find}
-      do
+      for j in ${apk_find}; do
         case ${j} in
-          *.apk)
-            num="$((${num}+1))"
-            set_mktouch_authority "${MODPATH}/${i}"
-            ui_print "- ${num}.REPLACE: ${i}/.replace"
-            echo "[${num}] REPLACE: ${i}/.replace" >> ${MODPATH}/log.md
-            ;;
+        *.apk)
+          num="$((${num} + 1))"
+          set_mktouch_authority "${MODPATH}/${i}"
+          ui_print "- ${num}.REPLACE: ${i}/.replace"
+          echo "[${num}] REPLACE: ${i}/.replace" >>${MODPATH}/log.md
+          ;;
         esac
       done
     fi
   done
-  echo "- [done]" >> ${MODPATH}/log.md
+  echo "- [done]" >>${MODPATH}/log.md
   ui_print "----------[ done ]"
   ui_print " "
 }
@@ -55,29 +55,31 @@ run_one() {
 run_two() {
   ui_print " "
   ui_print "----------[ Run: 包名精简 ]"
-    echo "- $(date '+%Y/%m/%d %T'): [包名精简]" >> ${MODPATH}/log.md
-    appinfo -d " " -o ands,pn -pn ${Package_Name_Reduction} 2>/dev/null | while read line; do
+  echo "- $(date '+%Y/%m/%d %T'): [包名精简]" >>${MODPATH}/log.md
+  appinfo -d " " -o ands,pn -pn ${Package_Name_Reduction} 2>/dev/null | while read line; do
     app_1="$(echo ${line} | awk '{print $1}')"
     app_2="$(echo ${line} | awk '{print $2}')"
     app_path="$(pm path ${app_2} | grep -v '/data/app/' | sed 's/package://g')"
     File_Dir="${MODPATH}${app_path%/*}"
     [ -z "${app_path}" ] && echo "[!] >> ${app_1} << 为data应用: 或是经过应用商店更新"
     if [ ! -d "$File_Dir" ]; then
-      num="$((${num}+1))"
+      num="$((${num} + 1))"
       echo "- ${num}.REPLACE: ${app_1} (${app_2})"
       set_mktouch_authority "${File_Dir}"
-      echo "名称:(${app_1})" >> ${MODPATH}/log.md
-      echo "包名:(${app_2})" >> ${MODPATH}/log.md
-      echo "原始路径: ${app_path}" >> ${MODPATH}/log.md
-      echo "模块路径: $(echo ${File_Dir} | sed 's/modules_update/modules/g')" >> ${MODPATH}/log.md
-      echo "" >> ${MODPATH}/log.md
+      echo "名称:(${app_1})" >>${MODPATH}/log.md
+      echo "包名:(${app_2})" >>${MODPATH}/log.md
+      echo "原始路径: ${app_path}" >>${MODPATH}/log.md
+      echo "模块路径: $(echo ${File_Dir} | sed 's/modules_update/modules/g')" >>${MODPATH}/log.md
+      echo "" >>${MODPATH}/log.md
     fi
   done
   [ -d "${MODPATH}/product" ] && mv ${MODPATH}/product ${MODPATH}/system/
   [ -d "${MODPATH}/system_ext" ] && mv ${MODPATH}/system_ext ${MODPATH}/system/
-  echo "- [done]" >> ${MODPATH}/log.md
+  echo "- [done]" >>${MODPATH}/log.md
   ui_print "----------[ done ]"
   ui_print " "
+  # 清理安装缓存
+  rm -rf /data/adb/Reducemiui_bin
 }
 
 retain_the_original_path() {
@@ -88,15 +90,14 @@ retain_the_original_path() {
     Already_exists="$(find /data/adb/modules*/Reducemiui -name '.replace' | awk -F '/.replace' '{print $1}' | awk -F '/system/' '{print $2}')"
     log_md="$(find /data/adb/modules*/Reducemiui -name 'log.md')"
     cp -r ${log_md} ${MODPATH}
-    echo "- $(date '+%Y/%m/%d %T'): [原有路径保留]" >> ${MODPATH}/log.md
-    for original_path in ${Already_exists}
-    do
-      num="$((${num}+1))"
+    echo "- $(date '+%Y/%m/%d %T'): [原有路径保留]" >>${MODPATH}/log.md
+    for original_path in ${Already_exists}; do
+      num="$((${num} + 1))"
       ui_print "- ${num}.REPLACE: /system/${original_path}"
-      echo "[${num}] update: /system/${original_path}/.replace" >> ${MODPATH}/log.md
+      echo "[${num}] update: /system/${original_path}/.replace" >>${MODPATH}/log.md
       set_mktouch_authority "${MODPATH}/system/${original_path}"
     done
-    echo "- [done]" >> ${MODPATH}/log.md
+    echo "- [done]" >>${MODPATH}/log.md
     ui_print "----------[ done ]"
     ui_print " "
   fi
@@ -119,6 +120,13 @@ pre_install() {
   unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
   # 写入模块信息
   echo -e "id=$module_id\nname=$module_name\nauthor=$module_author\nminMagisk=$module_minMagisk\n" >$TMPDIR/module.prop
+  # 保留dex2oat.prop配置文件
+  cp -r ${TMPDIR}/common/dex2oat.prop ${MODPATH}/
+
+  # hosts屏蔽analytics配置
+  #if [ $is_use_hosts == "false" ]; then
+  #  rm -rf $MODPATH/system/etc/hosts
+  #fi
 }
 
 inspect_file() {
@@ -156,9 +164,9 @@ costom_setttings() {
   inspect_file
   change_env
   # 写入更新日期
-  echo -n "description=$module_description$update_date" >> $TMPDIR/module.prop
+  echo -n "description=$module_description$update_date" >>$TMPDIR/module.prop
   # 写入版本号
-  echo -e "\nversion=$version" >> $TMPDIR/module.prop
+  echo -e "\nversion=$version" >>$TMPDIR/module.prop
 }
 
 clean_wifi_logs() {
@@ -184,14 +192,35 @@ uninstall_useless_app() {
   pm disable com.miui.analytics >/dev/null && ui_print "- pm disable com.miui.analytics: Success" || ui_print "- 不存在应用: com.miui.analytics 或已被精简"
 }
 
-dex2oat_app(){
+dex2oat_app() {
   ui_print "- 为保障流畅，执行dex2oat(Everything)优化，需要一点时间..."
-  for app_list in ${dex2oat_list}
-  do
+  for app_list in ${dex2oat_list}; do
     cmd package compile -m everything ${app_list} >/dev/null && ui_print "- ${app_list}: Success"
   done
   ui_print "- 优化完成"
 }
+
+hosts_file() {
+  mkdir -p ${MODPATH}/system/etc/
+  find_hosts="$(find /data/adb/modules*/*/system/etc -name 'hosts')"
+  if [ "$(echo "$find_hosts" | grep -v "Reducemiui")" != "" ]; then
+    echo "$find_hosts" | grep "Reducemiui" | xargs rm -rf
+    find_hosts="$(find /data/adb/modules*/*/system/etc -name 'hosts')"
+    have_an_effect_hosts="$(echo $find_hosts | awk '{print $NF}')"
+    if [ "$(cat "${have_an_effect_hosts}" | grep '# Start Reducemiui hosts')" == "" ]; then
+      cat "${TMPDIR}/common/hosts.txt" >> ${have_an_effect_hosts}
+    fi
+  else
+    find_hosts="$(find /data/adb/modules*/Reducemiui/system/etc -name 'hosts')"
+    if [ ! -f "${find_hosts}" ]; then
+      cp -r /system/etc/hosts ${MODPATH}/system/etc/
+      cat ${TMPDIR}/common/hosts.txt >> ${MODPATH}/system/etc/hosts
+    else
+      cp -r ${find_hosts} ${MODPATH}/system/etc/
+    fi
+  fi
+}
+
 
 pre_install
 ui_print "  "
@@ -206,3 +235,4 @@ dex2oat_app
 retain_the_original_path
 run_one
 run_two
+hosts_file

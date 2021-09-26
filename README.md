@@ -60,10 +60,17 @@
  * 在以下参数中true为开启，false为关闭
 
 > min_sdk
+>
 > Android版本判断要求最小SDK
 
 > Enable_determination
+>
 > Android版本判断配置
 
 > is_clean_logs
+>
 > 启用移除MIUI日志
+
+> is_use_hosts
+>
+> 使用hosts文件屏蔽Analytics域名，如果您有使用屏蔽广告类模块，请将其设置为false
