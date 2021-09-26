@@ -14,6 +14,8 @@
 #com.xiaomi.miplay_client
 # 6.MiuiDaemon 水龙ps: miui性能守护程序，跟官方内核配套用的。
 #com.miui.daemon
+# 7.小米钱包
+#com.mipay.wallet
 #
 # 2021/09/25新增 (来自老阿巴的说明: 不影响系统 可按需精简 已预先加入＃)
 # 1.日志抓取
@@ -68,8 +70,6 @@
 #com.miui.userguide
 # 25.智能助理
 #com.miui.personalassistant
-# 26.电子邮件
-#com.android.email
 #====================================================
 
 # 以下为默认精简内容
