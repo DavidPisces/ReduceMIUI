@@ -77,7 +77,7 @@ run_two() {
   ui_print "----------[ done ]"
   ui_print " "
   # 清理安装缓存
-  rm -rf /data/adb/Reducemiui_bin
+  rm -rf ${bin_path}
 }
 
 retain_the_original_path() {
@@ -181,8 +181,22 @@ clean_wifi_logs() {
 uninstall_useless_app() {
   ui_print "- 正在禁用智能服务"
   pm disable com.miui.systemAdSolution >/dev/null && ui_print "- pm disable com.miui.systemAdSolution: Success" || ui_print "- 不存在应用: com.miui.systemAdSolution 或已被精简"
-  ui_print "- 正在禁用Analytics"
-  pm disable com.miui.analytics >/dev/null && ui_print "- pm disable com.miui.analytics: Success" || ui_print "- 不存在应用: com.miui.analytics 或已被精简"
+  ui_print "- 正在移除Analytics"
+  if [ "$(pm list package | grep 'com.miui.analytics')" != "" ]; then
+    rm -rf /data/user/0/com.xiaomi.market/app_analytics/*
+    chown -R root:root /data/user/0/com.xiaomi.market/app_analytics/
+    chmod -R 000 /data/user/0/com.xiaomi.market/app_analytics/
+    pm uninstall --user 0 com.miui.analytics >/dev/null
+    if [ -d "/data/user/999/com.xiaomi.market/app_analytics/" ]; then
+      rm -rf /data/user/999/com.xiaomi.market/app_analytics/*
+      chown -R root:root /data/user/999/com.xiaomi.market/app_analytics/
+      chmod -R 000 /data/user/999/com.xiaomi.market/app_analytics/
+      pm uninstall --user 999 com.miui.analytics >/dev/null
+    fi
+    ui_print "- Analytics移除成功"
+  else
+    ui_print "- Analytics不存在"
+  fi
 }
 
 dex2oat_app() {

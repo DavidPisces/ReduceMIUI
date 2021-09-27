@@ -1,12 +1,28 @@
 # 这里根据包名获取app的系统路径 只需要填写需要精简的应用包名即可
 # 这么做的好处是: 即使之后MIUI版本变更了/system/*路径，依然能准确获取其位置。
 #====================================================
-# [NEW] 2021/09/25新增 (来自老阿巴的说明: 不影响系统 可按需精简 已预先加入＃)
+# 2021/09/27新增
+# 1.小爱同学
+#com.miui.voiceassist
+# 2.语音唤醒
+#com.miui.voicetrigger
+# 3.AI虚拟助手
+#com.xiaomi.aiasst.service
+# 4.投屏
+#com.milink.service
+# 5.投屏服务
+#com.xiaomi.miplay_client
+# 6.MiuiDaemon 水龙ps: miui性能守护程序，跟官方内核配套用的。
+#com.miui.daemon
+# 7.小米钱包
+#com.mipay.wallet
+#
+# 2021/09/25新增 (来自老阿巴的说明: 不影响系统 可按需精简 已预先加入＃)
 # 1.日志抓取
 #com.bsp.catchlog
 # 2.小米SIM卡激活服务 #(!)警告:精简后无法云同步短信/通话记录/密码管家
 #com.xiaomi.simactivate.service
-# 3.小米互联通信服务
+# 3.小米互联通信服务 和MIUI+相关联
 #com.xiaomi.mi_connect_service
 # 4.MIUI+
 #com.xiaomi.mirror
@@ -96,12 +112,6 @@ com.qualcomm.qti.autoregistration
 com.miui.qr
 #USIM卡应用
 com.android.stk
-#MiuiDaemon
-com.miui.daemon
-#投屏
-#com.milink.service
-#投屏服务
-#com.xiaomi.miplay_client
 #安全守护服务
 com.miui.greenguard
 #智慧生活
