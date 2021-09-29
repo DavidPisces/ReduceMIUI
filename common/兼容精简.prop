@@ -1,4 +1,5 @@
 # 这里面都是远古版本MIUI才有的目录
+# 如果包名精简不能正常工作，可以使用兼容精简
 /system/app/MSA-CN-NO_INSTALL_PACKAGE
 /system/app/mid_test
 /system/app/FidoCryptoService

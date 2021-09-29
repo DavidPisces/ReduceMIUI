@@ -16,6 +16,9 @@ min_sdk=29
 Enable_determination=false
 # 禁用miui日志
 is_clean_logs=true
+# 使用hosts屏蔽小米某些ad域名
+# 注意：使用该功能会导致主题商店在线加载图片出现问题
+is_use_hosts=false
 # 精简数量累计
 num=0
 # 可编辑文件 命名为*.prop是为了编辑/查看时一目了然
@@ -214,20 +217,20 @@ hosts_file() {
     find_hosts="$(find /data/adb/modules*/*/system/etc -name 'hosts')"
     have_an_effect_hosts="$(echo $find_hosts | awk '{print $NF}')"
     if [ "$(cat "${have_an_effect_hosts}" | grep '# Start Reducemiui hosts')" == "" ]; then
-      cat "${TMPDIR}/common/hosts.txt" >> ${have_an_effect_hosts}
+      cat "${TMPDIR}/common/hosts.txt" >>${have_an_effect_hosts}
     fi
   else
     mkdir -p ${MODPATH}/system/etc/
     find_hosts="$(find /data/adb/modules*/Reducemiui/system/etc -name 'hosts')"
     if [ ! -f "${find_hosts}" ]; then
       cp -r /system/etc/hosts ${MODPATH}/system/etc/
-      cat ${TMPDIR}/common/hosts.txt >> ${MODPATH}/system/etc/hosts
+      cat ${TMPDIR}/common/hosts.txt >>${MODPATH}/system/etc/hosts
     else
       cp -r ${find_hosts} ${MODPATH}/system/etc/
     fi
   fi
-}
 
+}
 
 pre_install
 ui_print "  "
@@ -242,4 +245,8 @@ dex2oat_app
 retain_the_original_path
 run_one
 run_two
-hosts_file
+if [ $is_use_hosts == true ]; then
+  hosts_file
+else
+  ui_print "- hosts文件未启用"
+fi

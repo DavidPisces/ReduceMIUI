@@ -1,3 +1,5 @@
+# 在这里是关于需要编译dex2oat的应用，默认以Everything模式编译
+# 编译的应用可以根据需要增加包名，可以自己添加
 com.miui.home
 com.android.settings
 com.miui.notification
