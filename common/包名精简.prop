@@ -2,6 +2,9 @@
 # 这么做的好处是: 即使之后MIUI版本变更了/system/*路径，依然能准确获取其位置。
 # 之后的版本我会尽可能添加应用的用途，以明确精简某些应用有什么风险
 #====================================================
+# USIM卡应用 ps：在某些机型上，精简该应用可能会导致信号差或者双卡功能受影响
+#com.android.stk
+#
 # 2021/09/27新增
 # 1.小爱同学
 #com.miui.voiceassist
@@ -72,12 +75,10 @@
 # 25.智能助理
 #com.miui.personalassistant
 #====================================================
-
 # 以下为默认精简内容
-
 #Analytics
 com.miui.analytics
-#智能服务
+#智能服务（MSA）
 com.miui.systemAdSolution
 #小米商城系统组件
 com.xiaomi.ab
@@ -89,7 +90,7 @@ com.android.printspooler
 com.android.bips
 #基本互动屏保
 com.android.dreams.basic
-#MiuiVpnSdkManager(游戏加速器 vpn类)
+#MiuiVpnSdkManager(游戏加速器）
 com.miui.vpnsdkmanager
 #系统跟踪
 com.android.traceur
@@ -105,14 +106,12 @@ com.goodix.fingerprint.setting
 com.miui.translation.youdao
 #金山翻译服务
 com.miui.translation.kingsoft
-#盲猜是和金山翻译有关
+#翻译服务
 com.miui.translationservice
 #自动对准（集成电路工艺) [!]ps: 其实不建议精简
 com.qualcomm.qti.autoregistration
 #CQR
 com.miui.qr
-#USIM卡应用
-com.android.stk
 #安全守护服务
 com.miui.greenguard
 #智慧生活
@@ -133,13 +132,13 @@ com.android.emergency
 com.mobiletools.systemhelper
 #X-Divert设置
 com.qti.xdivert
-#Print Service Recommendation Service@(不知道是啥)
+#Print Service Recommendation Service 打印推荐服务
 com.google.android.printservice.recommendation
 #/system/*/ONS ps: 盲猜模拟器之类
 com.android.ons
 #QDCM-FF ps: 高通色温调节相关
 com.qti.snapdragon.qdcm_ff
-#QColor ps: 盲猜饱和度/色彩类调节
+#QColor 高通色彩测试相关
 com.qualcomm.qti.qcolor
 
 #/system/priv-app/MusicFX
