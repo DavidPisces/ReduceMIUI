@@ -26,6 +26,28 @@ Compatible_with_older_versions="$(cat ${TMPDIR}/common/兼容精简.prop | grep 
 Package_Name_Reduction="$(cat ${TMPDIR}/common/包名精简.prop | grep -v '#')"
 dex2oat_list="$(cat ${TMPDIR}/common/dex2oat.prop | grep -v '#')"
 
+# 模块信息
+pre_install() {
+  inspect_file
+  # 模块配置
+  module_id=Reducemiui
+  module_name="Reduce MIUI Project"
+  module_author="雄氏老方 & 阿巴酱"
+  module_minMagisk=19000
+  module_description="精简系统服务，关闭部分系统日志 更新日期："
+  # 模块版本号
+  version="2.8"
+  # 模块精简列表更新日期
+  update_date="21.10.8"
+  ui_print "- 提取模块文件"
+  touch $TMPDIR/module.prop
+  unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
+  # 写入模块信息
+  echo -e "id=$module_id\nname=$module_name\nauthor=$module_author\nminMagisk=$module_minMagisk\n" >$TMPDIR/module.prop
+  # 保留dex2oat.prop配置文件
+  cp -r ${TMPDIR}/common/dex2oat.prop ${MODPATH}/
+}
+
 # 兼容精简
 run_one() {
   ui_print " "
@@ -101,27 +123,6 @@ retain_the_original_path() {
     ui_print "----------[ done ]"
     ui_print " "
   fi
-}
-
-pre_install() {
-  inspect_file
-  # 模块配置
-  module_id=Reducemiui
-  module_name="Reduce MIUI Project"
-  module_author="雄氏老方"
-  module_minMagisk=19000
-  module_description="精简系统服务，关闭部分系统日志 更新日期："
-  # 模块版本号
-  version="2.7"
-  # 模块精简列表更新日期
-  update_date="21.9.25"
-  ui_print "- 提取模块文件"
-  touch $TMPDIR/module.prop
-  unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
-  # 写入模块信息
-  echo -e "id=$module_id\nname=$module_name\nauthor=$module_author\nminMagisk=$module_minMagisk\n" >$TMPDIR/module.prop
-  # 保留dex2oat.prop配置文件
-  cp -r ${TMPDIR}/common/dex2oat.prop ${MODPATH}/
 }
 
 inspect_file() {
