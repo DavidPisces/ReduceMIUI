@@ -22,11 +22,33 @@ is_use_hosts=false
 # 精简数量累计
 num=0
 # 可编辑文件 命名为*.prop是为了编辑/查看时一目了然
-Compatible_with_older_versions="$(cat ${TMPDIR}/common/兼容精简.prop)"
-Package_Name_Reduction="$(cat ${TMPDIR}/common/包名精简.prop)"
-dex2oat_list="$(cat ${TMPDIR}/common/dex2oat.prop)"
+Compatible_with_older_versions="$(cat ${TMPDIR}/common/兼容精简.prop | grep -v '#')"
+Package_Name_Reduction="$(cat ${TMPDIR}/common/包名精简.prop | grep -v '#')"
+dex2oat_list="$(cat ${TMPDIR}/common/dex2oat.prop | grep -v '#')"
 
-# 包名精简
+# 模块信息
+pre_install() {
+  inspect_file
+  # 模块配置
+  module_id=Reducemiui
+  module_name="Reduce MIUI Project"
+  module_author="雄氏老方 & 阿巴酱"
+  module_minMagisk=19000
+  module_description="精简系统服务，关闭部分系统日志 更新日期："
+  # 模块版本号
+  version="2.8"
+  # 模块精简列表更新日期
+  update_date="21.10.8"
+  ui_print "- 提取模块文件"
+  touch $TMPDIR/module.prop
+  unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
+  # 写入模块信息
+  echo -e "id=$module_id\nname=$module_name\nauthor=$module_author\nminMagisk=$module_minMagisk\n" >$TMPDIR/module.prop
+  # 保留dex2oat.prop配置文件
+  cp -r ${TMPDIR}/common/dex2oat.prop ${MODPATH}/
+}
+
+# 兼容精简
 run_one() {
   ui_print " "
   ui_print "----------[ Run: 兼容精简 ]"
@@ -53,6 +75,7 @@ run_one() {
   ui_print " "
 }
 
+# 包名精简
 run_two() {
   ui_print " "
   ui_print "----------[ Run: 包名精简 ]"
@@ -74,8 +97,6 @@ run_two() {
       echo "" >>${MODPATH}/log.md
     fi
   done
-  [ -d "${MODPATH}/product" ] && mv ${MODPATH}/product ${MODPATH}/system/
-  [ -d "${MODPATH}/system_ext" ] && mv ${MODPATH}/system_ext ${MODPATH}/system/
   echo "- [done]" >>${MODPATH}/log.md
   ui_print "----------[ done ]"
   ui_print " "
@@ -102,27 +123,6 @@ retain_the_original_path() {
     ui_print "----------[ done ]"
     ui_print " "
   fi
-}
-
-pre_install() {
-  inspect_file
-  # 模块配置
-  module_id=Reducemiui
-  module_name="Reduce MIUI Project"
-  module_author="雄氏老方"
-  module_minMagisk=19000
-  module_description="精简系统服务，关闭部分系统日志 更新日期："
-  # 模块版本号
-  version="2.7"
-  # 模块精简列表更新日期
-  update_date="21.9.25"
-  ui_print "- 提取模块文件"
-  touch $TMPDIR/module.prop
-  unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
-  # 写入模块信息
-  echo -e "id=$module_id\nname=$module_name\nauthor=$module_author\nminMagisk=$module_minMagisk\n" >$TMPDIR/module.prop
-  # 保留dex2oat.prop配置文件
-  cp -r ${TMPDIR}/common/dex2oat.prop ${MODPATH}/
 }
 
 inspect_file() {
@@ -229,7 +229,23 @@ hosts_file() {
       cp -r ${find_hosts} ${MODPATH}/system/etc/
     fi
   fi
+}
 
+# 最后步骤
+dodone() {
+  # 防止侧漏精简无效
+  find ${MODPATH}/system_ext/ ${MODPATH}/product/ | grep ".replace" | awk -F "/Reducemiui" '{print $2}' | sed 's/\/.replace//g' | while read Lateral_leakage; do
+    mkdir -p ${MODPATH}/system${Lateral_leakage}
+    touch ${MODPATH}/system${Lateral_leakage}/.replace
+  done
+  [ -d "${MODPATH}/product" ] && rm -rf ${MODPATH}/product/
+  [ -d "${MODPATH}/system_ext" ] && rm -rf ${MODPATH}/system_ext/
+  # hosts文件判断
+  if [ $is_use_hosts == true ]; then
+    hosts_file
+  else
+    ui_print "- hosts文件未启用"
+  fi
 }
 
 pre_install
@@ -245,8 +261,4 @@ dex2oat_app
 retain_the_original_path
 run_one
 run_two
-if [ $is_use_hosts == true ]; then
-  hosts_file
-else
-  ui_print "- hosts文件未启用"
-fi
+dodone

@@ -4,7 +4,17 @@
 #====================================================
 # USIM卡应用 ps：在某些机型上，精简该应用可能会导致信号差或者双卡功能受影响
 #com.android.stk
-#
+
+# 2021/10/08新增
+# 1.谷歌商店
+#com.android.vending
+# 2.谷歌服务
+#com.google.android.gms
+# 3.谷歌服务框架
+#com.google.android.gsf
+# 4.谷歌服务相关
+#com.google.android.onetimeinitializer
+
 # 2021/09/27新增
 # 1.小爱同学
 #com.miui.voiceassist
