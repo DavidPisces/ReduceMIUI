@@ -1,6 +1,7 @@
 #!/bin/sh
 # ReduceMIUI 精简计划 配置文件
 # Made by @雄氏老方
+
 # 跳过挂载
 SKIPMOUNT=false
 # 如果您需要加载system.prop，请将其设置为true
@@ -9,12 +10,7 @@ PROPFILE=true
 POSTFSDATA=false
 # 如果您需要late_start服务脚本（service.sh），请将其设置为true
 LATESTARTSERVICE=true
-# SDK判断
-sdk=$(grep_prop ro.build.version.sdk)
-# 所要求最小版本
-min_sdk=29
-Enable_determination=false
-# 禁用miui日志
+# 禁用miui日志，如果您需要抓取log，请不要开启！
 is_clean_logs=true
 # 使用hosts屏蔽小米某些ad域名
 # 注意：使用该功能会导致主题商店在线加载图片出现问题
@@ -36,9 +32,9 @@ pre_install() {
   module_minMagisk=19000
   module_description="精简系统服务，关闭部分系统日志 更新日期："
   # 模块版本号
-  version="2.8"
+  version="2.81"
   # 模块精简列表更新日期
-  update_date="21.10.8"
+  update_date="21.10.31"
   ui_print "- 提取模块文件"
   touch $TMPDIR/module.prop
   unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
@@ -148,15 +144,6 @@ set_mktouch_authority() {
 }
 
 costom_setttings() {
-  # 版本判断启用配置
-  if [ "$Enable_determination" == "true" ]; then
-    if [ $sdk -ge $min_sdk ]; then
-      ui_print "- 当前SDK为：$sdk"
-    else
-      abort "- 当前SDK为：$sdk，不符合要求最低SDK：$min_sdk"
-      ui_print "- ! 安装终止"
-    fi
-  fi
   inspect_file
   change_env
   # 写入更新日期

@@ -32,7 +32,7 @@
 #com.mipay.wallet
 #
 # 2021/09/25新增 (来自老阿巴的说明: 不影响系统 可按需精简 已预先加入＃)
-# 1.日志抓取
+# 1.日志抓取(如果你需要抓日志，请不要精简)
 #com.bsp.catchlog
 # 2.小米SIM卡激活服务 #(!)警告:精简后无法云同步短信/通话记录/密码管家
 #com.xiaomi.simactivate.service
@@ -40,7 +40,7 @@
 #com.xiaomi.mi_connect_service
 # 4.MIUI+
 #com.xiaomi.mirror
-# 5.用户反馈
+# 5.用户反馈(如果你想使用官方工具抓取日志，不建议精简)
 #com.miui.bugreport
 # 6.快应用
 #com.miui.hybrid
@@ -54,15 +54,15 @@
 #com.miui.aod
 # 10.小米互传
 #com.miui.mishare.connectivity
-# 11.NFC
+# 11.NFC(NFC服务，建议不要精简)
 #com.android.nfc
-# 12.小米智能卡
+# 12.小米智能卡(MiPay相关服务)
 #com.miui.tsmclient
 # 13.悬浮球
 #com.miui.touchassistant
 # 14.小米音乐
 #com.miui.player
-# 15.CIT
+# 15.CIT(测试工具)
 #com.miui.cit
 # 16.MODEM测试工具
 #com.xiaomi.mtb
@@ -134,7 +134,7 @@ com.miui.miservice
 com.android.providers.userdictionary
 #照片屏幕保护程序
 com.android.dreams.phototable
-#Android 无障碍套件
+#Android 无障碍套件(talkback)
 com.google.android.marvin.talkback
 #急救信息(原生组件，MIUI几乎不需要)
 com.android.emergency
