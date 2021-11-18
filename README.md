@@ -2,10 +2,8 @@
 # Reduce MIUI Project
 
 ##### 这是一个Magisk模块，适用于国内版MIUI  
-##### This is a Magisk Moudle For Chinese version MIUI
 
 ######  特点：在不影响正常功能情况下尽可能精简系统进程
-###### Features: Streamline system processes as much as possible without affecting normal functions
 
 [下载地址Download(Releases)](https://github.com/l2642235863/ReduceMIUI/releases)
 
@@ -24,7 +22,7 @@
 - 使用hosts屏蔽Analytics发送数据的部分域名
 
   ###### 以下是模块的参数调整和注意事项
-  ###### These are variables for the module and precautions
+
 
 ##### 注意事项
   
