@@ -1,6 +1,7 @@
 #!/bin/sh
 # ReduceMIUI 精简计划 配置文件
 # Made by @雄氏老方
+# Thanks to Petit-Abba
 
 # 跳过挂载
 SKIPMOUNT=false
@@ -15,6 +16,8 @@ is_clean_logs=true
 # 使用hosts屏蔽小米某些ad域名
 # 注意：使用该功能会导致主题商店在线加载图片出现问题
 is_use_hosts=false
+# 默认dex2oat优化编译模式
+dex2oat_mode="everything"
 # 精简数量累计
 num=0
 # 可编辑文件 命名为*.prop是为了编辑/查看时一目了然
@@ -32,9 +35,9 @@ pre_install() {
   module_minMagisk=19000
   module_description="精简系统服务，关闭部分系统日志 更新日期："
   # 模块版本号
-  version="2.81"
+  version="2.82"
   # 模块精简列表更新日期
-  update_date="21.10.31"
+  update_date="21.11.18"
   ui_print "- 提取模块文件"
   touch $TMPDIR/module.prop
   unzip -o "$ZIPFILE" 'system/*' -d $MODPATH >&2
@@ -190,9 +193,9 @@ uninstall_useless_app() {
 }
 
 dex2oat_app() {
-  ui_print "- 为保障流畅，执行dex2oat(Everything)优化，需要一点时间..."
+  ui_print "- 为保障流畅，执行dex2oat($dex2oat_mode)优化，需要一点时间..."
   for app_list in ${dex2oat_list}; do
-    cmd package compile -m everything ${app_list} >/dev/null && ui_print "- ${app_list}: Success"
+    cmd package compile -m $dex2oat_mode ${app_list} >/dev/null && ui_print "- ${app_list}: Success"
   done
   ui_print "- 优化完成"
 }
