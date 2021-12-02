@@ -37,7 +37,7 @@ pre_install() {
   module_minMagisk=19000
   module_description="精简系统服务，关闭部分系统日志 更新日期："
   # 模块版本号
-  version="2.82"
+  version="2.83"
   # 模块精简列表更新日期
   update_date="21.11.18"
   ui_print "- 提取模块文件"
