@@ -156,19 +156,27 @@ costom_setttings() {
 }
 
 clean_wifi_logs() {
-  if [ "$is_clean_logs" == "true" ]; then
-    ui_print "- 正在停止tcpdump"
-    stop tcpdump
-    ui_print "- 正在停止cnss_diag"
-    stop cnss_diag
-    ui_print "- 正在停止logd"
-    stop logd
-    ui_print "- 正在清除MIUI WiFi log"
-    rm -rf /data/vendor/wlan_logs/*
-    setprop sys.miui.ndcd off >/dev/null
-    touch /data/adb/modules_update/Reducemiui/system.prop
-    echo "sys.miui.ndcd=off" >/data/adb/modules_update/Reducemiui/system.prop
-  fi
+    if [ "$is_clean_logs" == "true" ]; then
+        if [ "$SDK" == 30 ]; then
+            ui_print "- 正在停止tcpdump"
+            stop tcpdump
+            ui_print "- 正在停止cnss_diag"
+            stop cnss_diag
+        fi
+        if [ "$SDK" == 31 ]; then
+            ui_print "- 正在停止tcpdump"
+            stop vendor.tcpdump
+            ui_print "- 正在停止cnss_diag"
+            stop vendor.cnss_diag
+        fi
+        ui_print "- 正在停止logd"
+        stop logd
+        ui_print "- 正在清除MIUI WiFi log"
+        rm -rf /data/vendor/wlan_logs/*
+        setprop sys.miui.ndcd off >/dev/null
+        touch /data/adb/modules_update/Reducemiui/system.prop
+        echo "sys.miui.ndcd=off" >/data/adb/modules_update/Reducemiui/system.prop
+    fi
 }
 
 uninstall_useless_app() {
