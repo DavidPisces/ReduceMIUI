@@ -150,7 +150,7 @@ set_mktouch_authority() {
   chmod 0644 $1/.replace
 }
 
-custom_setttings() {
+custom_settings() {
   inspect_file
   change_env
   # 写入更新日期
@@ -267,7 +267,7 @@ ui_print "  "
 ui_print "  Reduce MIUI Project"
 ui_print "  "
 ui_print "  "
-custom_setttings
+custom_settings
 clean_wifi_logs
 reduce_test_services
 uninstall_useless_app
