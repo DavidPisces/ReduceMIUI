@@ -18,6 +18,8 @@ is_clean_logs=true
 is_use_hosts=false
 # 默认dex2oat优化编译模式
 dex2oat_mode="everything"
+# 获取系统SDK
+SDK=$(getprop ro.system.build.version.sdk)
 # 精简数量累计
 num=0
 # 可编辑文件 命名为*.prop是为了编辑/查看时一目了然
