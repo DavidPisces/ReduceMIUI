@@ -1,7 +1,7 @@
 #!/bin/sh
 # ReduceMIUI 精简计划 配置文件
 # Made by @雄氏老方
-# Thanks to Petit-Abba
+# Thanks to Petit-Abba & Amktiao
 
 # 跳过挂载
 SKIPMOUNT=false
@@ -269,6 +269,7 @@ ui_print "  "
 ui_print "  "
 custom_setttings
 clean_wifi_logs
+reduce_test_services
 uninstall_useless_app
 dex2oat_app
 retain_the_original_path
