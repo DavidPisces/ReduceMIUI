@@ -1,7 +1,7 @@
 #!/bin/sh
 # ReduceMIUI 精简计划 配置文件
 # Made by @雄氏老方
-# Thanks to Petit-Abba
+# Thanks to Petit-Abba & Amktiao
 
 # 跳过挂载
 SKIPMOUNT=false
@@ -13,11 +13,15 @@ POSTFSDATA=false
 LATESTARTSERVICE=true
 # 禁用miui日志，如果您需要抓取log，请不要开启！
 is_clean_logs=true
+# 禁用非必要调试服务！
+is_reduce_test_services=true
 # 使用hosts屏蔽小米某些ad域名
 # 注意：使用该功能会导致主题商店在线加载图片出现问题
 is_use_hosts=false
 # 默认dex2oat优化编译模式
 dex2oat_mode="everything"
+# 获取系统SDK
+SDK=$(getprop ro.system.build.version.sdk)
 # 精简数量累计
 num=0
 # 可编辑文件 命名为*.prop是为了编辑/查看时一目了然
@@ -35,7 +39,7 @@ pre_install() {
   module_minMagisk=19000
   module_description="精简系统服务，关闭部分系统日志 更新日期："
   # 模块版本号
-  version="2.82"
+  version="2.83"
   # 模块精简列表更新日期
   update_date="21.11.18"
   ui_print "- 提取模块文件"
@@ -146,7 +150,7 @@ set_mktouch_authority() {
   chmod 0644 $1/.replace
 }
 
-costom_setttings() {
+custom_settings() {
   inspect_file
   change_env
   # 写入更新日期
@@ -156,21 +160,40 @@ costom_setttings() {
 }
 
 clean_wifi_logs() {
-  if [ "$is_clean_logs" == "true" ]; then
-    ui_print "- 正在停止tcpdump"
-    stop tcpdump
-    ui_print "- 正在停止cnss_diag"
-    stop cnss_diag
-    ui_print "- 正在停止logd"
-    stop logd
-    ui_print "- 正在清除MIUI WiFi log"
-    rm -rf /data/vendor/wlan_logs/*
-    setprop sys.miui.ndcd off >/dev/null
-    touch /data/adb/modules_update/Reducemiui/system.prop
-    echo "sys.miui.ndcd=off" >/data/adb/modules_update/Reducemiui/system.prop
-  fi
+    if [ "$is_clean_logs" == "true" ]; then
+        if [ "$SDK" == 30 ]; then
+            ui_print "- 正在停止tcpdump"
+            stop tcpdump
+            ui_print "- 正在停止cnss_diag"
+            stop cnss_diag
+        fi
+        if [ "$SDK" == 31 ]; then
+            ui_print "- 正在停止tcpdump"
+            stop vendor.tcpdump
+            ui_print "- 正在停止cnss_diag"
+            stop vendor.cnss_diag
+        fi
+        ui_print "- 正在停止logd"
+        stop logd
+        ui_print "- 正在清除MIUI WiFi log"
+        rm -rf /data/vendor/wlan_logs/*
+        setprop sys.miui.ndcd off >/dev/null
+        touch /data/adb/modules_update/Reducemiui/system.prop
+        echo "sys.miui.ndcd=off" >/data/adb/modules_update/Reducemiui/system.prop
+    fi
 }
-
+reduce_test_services() {
+    if [ "$is_reduce_test_services" == "true" ]; then
+        if [ "$SDK" == 30 ]; then
+            ui_print "- 正在停止ipacm-diag"
+            stop ipacm-diag
+        fi
+        if [ "$SDK" == 31 ]; then
+            ui_print "- 正在停止ipacm-diag"
+            stop vendor.ipacm-diag
+        fi
+    fi
+}
 uninstall_useless_app() {
   ui_print "- 正在禁用智能服务"
   pm disable com.miui.systemAdSolution >/dev/null && ui_print "- pm disable com.miui.systemAdSolution: Success" || ui_print "- 不存在应用: com.miui.systemAdSolution 或已被精简"
@@ -244,8 +267,9 @@ ui_print "  "
 ui_print "  Reduce MIUI Project"
 ui_print "  "
 ui_print "  "
-costom_setttings
+custom_settings
 clean_wifi_logs
+reduce_test_services
 uninstall_useless_app
 dex2oat_app
 retain_the_original_path
