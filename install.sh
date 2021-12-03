@@ -1,7 +1,7 @@
 #!/bin/sh
 # ReduceMIUI 精简计划 配置文件
 # Made by @雄氏老方
-# Thanks to Petit-Abba & Amktiao
+# Thanks to Petit-Abba Amktiao zjw2017
 
 # 跳过挂载
 SKIPMOUNT=false
@@ -25,6 +25,7 @@ SDK=$(getprop ro.system.build.version.sdk)
 # 精简数量累计
 num=0
 # 可编辑文件 命名为*.prop是为了编辑/查看时一目了然
+# ReduceMIUI自定义配置文件目录
 Compatible_with_older_versions="$(cat ${TMPDIR}/common/兼容精简.prop | grep -v '#')"
 Package_Name_Reduction="$(cat ${TMPDIR}/common/包名精简.prop | grep -v '#')"
 dex2oat_list="$(cat ${TMPDIR}/common/dex2oat.prop | grep -v '#')"
@@ -159,40 +160,38 @@ custom_settings() {
   echo -e "\nversion=$version" >>$TMPDIR/module.prop
 }
 
-clean_wifi_logs() {
-    if [ "$is_clean_logs" == "true" ]; then
-        if [ "$SDK" == 30 ]; then
-            ui_print "- 正在停止tcpdump"
-            stop tcpdump
-            ui_print "- 正在停止cnss_diag"
-            stop cnss_diag
-        fi
-        if [ "$SDK" == 31 ]; then
-            ui_print "- 正在停止tcpdump"
-            stop vendor.tcpdump
-            ui_print "- 正在停止cnss_diag"
-            stop vendor.cnss_diag
-        fi
-        ui_print "- 正在停止logd"
-        stop logd
-        ui_print "- 正在清除MIUI WiFi log"
-        rm -rf /data/vendor/wlan_logs/*
-        setprop sys.miui.ndcd off >/dev/null
-        touch /data/adb/modules_update/Reducemiui/system.prop
-        echo "sys.miui.ndcd=off" >/data/adb/modules_update/Reducemiui/system.prop
-    fi
-}
 reduce_test_services() {
-    if [ "$is_reduce_test_services" == "true" ]; then
-        if [ "$SDK" == 30 ]; then
-            ui_print "- 正在停止ipacm-diag"
-            stop ipacm-diag
-        fi
-        if [ "$SDK" == 31 ]; then
-            ui_print "- 正在停止ipacm-diag"
-            stop vendor.ipacm-diag
-        fi
+  if [ "$is_reduce_test_services" == "true" ]; then
+    if [ "$SDK" == 30 ]; then
+      ui_print "- 正在停止ipacm-diag"
+      stop ipacm-diag
     fi
+    if [ "$SDK" == 31 ]; then
+      ui_print "- 正在停止ipacm-diag"
+      stop vendor.ipacm-diag
+    fi
+  fi
+  if [ "$is_clean_logs" == "true" ]; then
+    if [ "$SDK" == 30 ]; then
+      ui_print "- 正在停止tcpdump"
+      stop tcpdump
+      ui_print "- 正在停止cnss_diag"
+      stop cnss_diag
+    fi
+    if [ "$SDK" == 31 ]; then
+      ui_print "- 正在停止tcpdump"
+      stop vendor.tcpdump
+      ui_print "- 正在停止cnss_diag"
+      stop vendor.cnss_diag
+    fi
+    ui_print "- 正在停止logd"
+    stop logd
+    ui_print "- 正在清除MIUI WiFi log"
+    rm -rf /data/vendor/wlan_logs/*
+    setprop sys.miui.ndcd off >/dev/null
+    touch /data/adb/modules_update/Reducemiui/system.prop
+    echo "sys.miui.ndcd=off" >/data/adb/modules_update/Reducemiui/system.prop
+  fi
 }
 uninstall_useless_app() {
   ui_print "- 正在禁用智能服务"
@@ -268,7 +267,6 @@ ui_print "  Reduce MIUI Project"
 ui_print "  "
 ui_print "  "
 custom_settings
-clean_wifi_logs
 reduce_test_services
 uninstall_useless_app
 dex2oat_app
