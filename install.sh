@@ -37,7 +37,7 @@ pre_install() {
   module_id=Reducemiui
   module_name="Reduce MIUI Project"
   module_author="雄氏老方 & 阿巴酱"
-  module_minMagisk=19000
+  module_minMagisk=23000
   module_description="精简系统服务，关闭部分系统日志 更新日期："
   # 模块版本号
   version="2.83"
@@ -188,6 +188,8 @@ reduce_test_services() {
     stop logd
     ui_print "- 正在清除MIUI WiFi log"
     rm -rf /data/vendor/wlan_logs/*
+    ui_print "- 正在清除MIUI 充电 log"
+    rm -rf /data/vendor/charge_logger/*
     setprop sys.miui.ndcd off >/dev/null
     touch /data/adb/modules_update/Reducemiui/system.prop
     echo "sys.miui.ndcd=off" >/data/adb/modules_update/Reducemiui/system.prop
