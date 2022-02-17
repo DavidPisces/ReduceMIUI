@@ -5,7 +5,9 @@
 
 ###### Features: Simplify system processes as much as possible without affecting normal functions
 
-[Download addressDownload(Releases)](https://github.com/l2642235863/ReduceMIUI/releases)
+[Download addressDownload(Releases)](https://github.com/DavidPisces/ReduceMIUI_canary/releases/tag/latest)
+
+###### Note: the latest version is automatically packaged by Github Action, this repository Release only retains the old version packaged manually before, and the latest version is automatically packaged and uploaded by the ReduceMIUI_canary repository
 
 [Author Coolapk Homepage (@xiongshilaofang)](http://www.coolapk.com/u/665894)
 
