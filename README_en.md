@@ -11,6 +11,8 @@
 
 [Author Coolapk Homepage (@xiongshilaofang)](http://www.coolapk.com/u/665894)
 
+[简体中文 README](https://github.com/DavidPisces/ReduceMIUI/blob/master/README.md)
+
 ##### Main functions Function:
 
 - Simplified system process, which can be adjusted according to the thin configuration
