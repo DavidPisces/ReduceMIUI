@@ -65,14 +65,10 @@ if [ "$(ls /sys/fs/f2fs | grep dm)" = "$(getprop dev.mnt.blk.data)" ]; then
   echo "128" > /sys/block/$(getprop dev.mnt.blk.data)/queue/read_ahead_kb
 fi
 
-# 为小米 865/870 平台启用 f2fs_gc_booster 功能
-# TODO: 通过获取系统提供的值以确定实际的 dm 设备
-# TODO: 小米的原子存储技术 (区别对待)
-# 禁用F2FS文件系统I/O统计
-# 在 android/platform_system_core/blob/master/rootdir/init.rc 中
-# 的历史提交 commit: 8d8edad4437 中默认启用了它
-if [ "$(getprop ro.board.platform)" = "kona" ]; then
-  echo "1" > /sys/fs/f2fs/$(getprop dev.mnt.blk.data)/gc_booster
+# F2FS 参数调整
+if [ "$(getprop ro.board.platform)" = "kona" ] || [ "$(getprop ro.board.platform)" = "lahaina" ]; then
+  echo "200" > /sys/fs/f2fs/$(getprop dev.mnt.blk.data)/cp_interval
+  echo "50" > /sys/fs/f2fs/$(getprop dev.mnt.blk.data)/gc_urgent_sleep_time
   echo "0" > /sys/fs/f2fs/$(getprop dev.mnt.blk.data)/iostat_enable
 fi
 
@@ -88,7 +84,7 @@ echo "0" > /sys/module/subsystem_restart/parameters/enable_ramdumps
 echo "N" > /sys/kernel/debug/debug_enabled
 echo "off" > /proc/sys/kernel/printk_devkmsg
 
-# 调整虚拟空间页面集群
+# 调整虚拟内存页面数量
 echo "0" > /proc/sys/vm/page-cluster
 
 # 禁用sched_autogroup
