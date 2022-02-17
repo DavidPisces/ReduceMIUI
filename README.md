@@ -10,6 +10,8 @@
 
 [作者酷安主页(@雄氏老方)](http://www.coolapk.com/u/665894)
 
+[English version README](https://github.com/DavidPisces/ReduceMIUI/blob/master/README_en.md)
+
 ##### 主要功能 Function：
 
 - 精简系统进程，可以根据精简配置自行调整
