@@ -6,7 +6,7 @@
 # 跳过挂载
 SKIPMOUNT=false
 # 如果您需要加载system.prop，请将其设置为true
-PROPFILE=true
+PROPFILE=false
 # 如果您需要post-fs-data脚本（post-fs-data.sh），请将其设置为true
 POSTFSDATA=false
 # 如果您需要late_start服务脚本（service.sh），请将其设置为true
