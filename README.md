@@ -5,9 +5,6 @@
 
 ######  特点：在不影响正常功能情况下尽可能精简系统进程
 
-[下载地址Download(ReduceMIUI_canary)](https://github.com/DavidPisces/ReduceMIUI_canary/releases/tag/latest)
-######  注意，目前最新版本由Github Action自动打包，本仓库Release仅保留以前手动打包的旧版本，最新版本全部由ReduceMIUI_canary仓库自动打包并上传
-
 [作者酷安主页(@雄氏老方)](http://www.coolapk.com/u/665894)
 
 [English version README](https://github.com/DavidPisces/ReduceMIUI/blob/master/README_en.md)
