@@ -1,19 +1,20 @@
-# MIUI精简计划
 # Reduce MIUI Project
 
 ![](https://img.shields.io/github/license/DavidPisces/ReduceMIUI)
 
-##### 这是一个Magisk模块，适用于国内版MIUI  
+这是一个Magisk模块，适用于国内版MIUI  
 
-#####  特点：在不影响正常功能情况下尽可能精简系统进程
+特点：在不影响正常功能情况下尽可能精简系统进程
 
 [作者酷安主页(@雄氏老方)](http://www.coolapk.com/u/665894)
 
 [English version README](https://github.com/DavidPisces/ReduceMIUI/blob/master/README_en.md)
 
-#### 注意：目前本仓库最新模块已经由ReduceMIUI-Canary仓库自动打包
+注意：目前本仓库最新模块已经由ReduceMIUI-Canary仓库的Github Action自动打包，本仓库的Release只保留2.82及其以前的旧版，如果您想下载新的版本，请点击下方链接跳转到ReduceMIUI-Canary仓库的Release页面
 
-#### **下载地址** ：[Release](https://github.com/DavidPisces/ReduceMIUI-Canary/releases/tag/latest)
+### **下载地址(ReduceMIUI-Canary)** ：[Release](https://github.com/DavidPisces/ReduceMIUI-Canary/releases/tag/latest)
+
+--------
 
 #### 主要功能 ：
 
