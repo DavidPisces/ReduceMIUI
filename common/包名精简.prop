@@ -68,16 +68,17 @@
 #====================================================
 
 # 打印服务
-# 如果您有使用打印机，请不要精简
+# 如果您有使用打印机相关服务，请不要精简
+# 以后默认不会再进行精简
 
 # 打印处理服务
-com.android.printspooler
+#com.android.printspooler
 
 # 系统打印服务
-com.android.bips
+#com.android.bips
 
 # 打印推荐服务，打印服务相关
-com.google.android.printservice.recommendation
+#com.google.android.printservice.recommendation
 
 #====================================================
 # 按需精简列表
