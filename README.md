@@ -1,15 +1,21 @@
 # MIUI精简计划
 # Reduce MIUI Project
 
+![](https://img.shields.io/github/license/DavidPisces/ReduceMIUI)
+
 ##### 这是一个Magisk模块，适用于国内版MIUI  
 
-######  特点：在不影响正常功能情况下尽可能精简系统进程
+#####  特点：在不影响正常功能情况下尽可能精简系统进程
 
 [作者酷安主页(@雄氏老方)](http://www.coolapk.com/u/665894)
 
 [English version README](https://github.com/DavidPisces/ReduceMIUI/blob/master/README_en.md)
 
-##### 主要功能 ：
+#### 注意：目前本仓库最新模块已经由ReduceMIUI-Canary仓库自动打包
+
+#### **下载地址** ：[Release](https://github.com/DavidPisces/ReduceMIUI-Canary/releases/tag/latest)
+
+#### 主要功能 ：
 
 - 精简系统进程，可以根据精简配置自行调整
 
@@ -21,58 +27,58 @@
 
 - 使用hosts屏蔽Analytics发送数据的部分域名
 
-  ###### 以下是模块的参数调整和注意事项
 
+**以下是模块的参数调整和注意事项**
 
-##### 注意事项
+#### 注意事项
   
 * 模块的主要调整参数在install.sh,修改install.sh的各种参数即可，module.prop由install.sh自动生成
 
 
 
-##### 参数设置
+#### 参数设置
 
 以下参数均在install.sh
+```shell
+module_id
+# 模块的id，可自定义
 
-> module_id
-> 模块的id，可自定义
+module_name
+# 模块的名称，在Magisk内显示的名称
 
-> module_name
-> 模块的名称，在Magisk内显示的名称
+module_author
+# 模块的作者
 
-> module_author
-> 模块的作者
+module_minMagisk
+# 模块所需要的最小Magisk版本
 
-> module_minMagisk
-> 模块所需要的最小Magisk版本
+module_description
+# 模块在Magisk页面的描述
 
-> module_description
-> 模块在Magisk页面的描述
+version
+# 模块版本号，相当于module.prop的version变量
 
-> version
-> 模块版本号，相当于module.prop的version变量
-
-> update_date
-> 模块更新日期，会自动加入模块描述
-
-
-
- * 在以下参数中true为开启，false为关闭
-
-> is_clean_logs
->
-> 启用移除MIUI日志
-
-> is_use_hosts
->
-> 使用hosts文件屏蔽Analytics域名，如果您有使用屏蔽广告类模块，请将其设置为false，如果您使用该功能，可能导致小米主题之类的服务无法加载预览图
+update_date
+# 模块更新日期，会自动加入模块描述
+```
 
 
-##### 配置文件介绍
+* 在以下参数中true为开启，false为关闭
+```shell
+is_clean_logs
+
+#启用移除MIUI日志
+
+is_use_hosts
+
+#使用hosts文件屏蔽Analytics域名，如果您有使用屏蔽广告类模块，请将其设置为false，如果您使用该功能，可能导致小米主题之类的服务无法加载预览图
+```
+
+#### 配置文件介绍：
 
 以下文件均在模块的common目录，如果您发现精简部分组件出现问题，可以根据这些配置文件进行调整
 
-shell知识：#号代表注释，即当前行不会生效，如果您需要精简某一应用，删除该应用包名前的#号即可，相应的应用我们都有写注释，当然一部分系统应用也标注了作用
+shell知识：**#号代表注释，即当前行不会生效**，如果您需要精简某一应用，删除该应用包名前的#号即可，相应的应用我们都有写注释，当然一部分系统应用也标注了作用
 
 - 包名精简.prop
 
