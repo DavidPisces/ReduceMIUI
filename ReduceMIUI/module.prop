@@ -1,5 +1,5 @@
 id=Reducemiui
 name=Reduce MIUI Project
 author="雄氏老方 & 阿巴酱 & 柚稚的孩纸"
-description="精简系统服务，关闭部分系统日志 更新日期：2023年2月"
+description="精简系统服务，关闭部分系统日志 更新日期：2023年2月9日"
 updateJson=https://ghproxy.com/https://github.com/zjw2017/ReduceMIUI/blob/main/module.json
