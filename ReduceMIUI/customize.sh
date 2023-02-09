@@ -10,7 +10,8 @@ rm -rf /data/system/package_cache
 # ReduceMIUI自定义配置文件目录
 Package_Name_Reduction="$(cat ${MODPATH}/包名精简.prop | grep -v '#')"
 dex2oat_list="$(cat ${MODPATH}/dex2oat.prop | grep -v '#')"
-echo $(pm list packages -f -a) >$MODPATH/packages.log
+echo "$(pm list packages -f -a)" >$MODPATH/packages.log
+sed -i -e 's/\ /\\\n/g' -e 's/\\//g' -e 's/package://g' $MODPATH/packages.log
 # 禁用miui日志，如果您需要抓取log，请不要开启！
 is_clean_logs=true
 # 禁用非必要调试服务！
@@ -21,7 +22,7 @@ is_use_hosts=false
 # 默认dex2oat优化编译模式
 dex2oat_mode="everything"
 # 获取系统SDK
-SDK=$(getprop ro.system.build.version.sdk)
+SDK="$(getprop ro.system.build.version.sdk)"
 touch_replace() {
   mkdir -p $1
   touch $1/.replace
@@ -33,32 +34,32 @@ reduce_test_services() {
     if [ "$SDK" -le 30 ]; then
       ui_print "- 正在停止ipacm-diag"
       stop ipacm-diag
-      echo "stop ipacm-diag" >>$MODPATH/services.sh
+      echo "stop ipacm-diag" >>$MODPATH/service.sh
     fi
     if [ "$SDK" -ge 31 ]; then
       ui_print "- 正在停止ipacm-diag"
       stop vendor.ipacm-diag
-      echo "stop vendor.ipacm-diag" >>$MODPATH/services.sh
+      echo "stop vendor.ipacm-diag" >>$MODPATH/service.sh
     fi
   fi
   if [ "$is_clean_logs" == "true" ]; then
     if [ "$SDK" -le 30 ]; then
       ui_print "- 正在停止tcpdump"
       stop tcpdump
-      echo "stop tcpdump" >>$MODPATH/services.sh
+      echo "stop tcpdump" >>$MODPATH/service.sh
       ui_print "- 正在停止cnss_diag"
       stop cnss_diag
-      echo "stop cnss_diag" >>$MODPATH/services.sh
+      echo "stop cnss_diag" >>$MODPATH/service.sh
     elif [ "$SDK" -ge 31 ]; then
       ui_print "- 正在停止tcpdump"
       stop vendor.tcpdump
-      echo "stop vendor.tcpdump" >>$MODPATH/services.sh
+      echo "stop vendor.tcpdump" >>$MODPATH/service.sh
       ui_print "- 正在停止cnss_diag"
       stop vendor.cnss_diag
-      echo "stop vendor.cnss_diag" >>$MODPATH/services.sh
+      echo "stop vendor.cnss_diag" >>$MODPATH/service.sh
       ui_print "- 正在停止logd"
       stop logd
-      echo "stop logd" >>$MODPATH/services.sh
+      echo "stop logd" >>$MODPATH/service.sh
     fi
     ui_print "- 正在清除MIUI WiFi log"
     rm -rf /data/vendor/wlan_logs/*
@@ -95,24 +96,24 @@ dex2oat_app() {
   ui_print "- 为保障流畅，执行dex2oat ($dex2oat_mode)优化，需要一点时间..."
   for app_list in ${dex2oat_list}; do
     var=$app_list
-    record=$(eval cat $MODPATH/packages.log | grep "$var"$)
-    apk_path=${record%=*}
-    apk_dir=${apk_path%/*}
-    apk_name=${apk_path##*/}
-    apk_name=${apk_name%.*}
-    if [ $(unzip -l $apk_path | grep lib/armeabi) == "" ]; then
+    record="$(eval cat $MODPATH/packages.log | grep "$var"$)"
+    apk_path="${record%=*}"
+    apk_dir="${apk_path%/*}"
+    apk_name="${apk_path##*/}"
+    apk_name="${apk_name%.*}"
+    if [[ "$(unzip -l $apk_path | grep lib/)" == "" ]]||[[ "$(unzip -l $apk_path | grep lib/arm64)" != "" ]]; then
       apk_abi=arm64
     else
       apk_abi=arm
     fi
     if [[ "$apk_dir" == "/data"* ]]; then
-      if [ $(unzip -l $apk_path | grep classes.dex) != "" ]; then
+      if [ "$(unzip -l $apk_path | grep classes.dex)" != "" ]; then
         rm -rf "$apk_dir"/oat/$apk_abi/*
         dex2oat --dex-file="$apk_path" --compiler-filter=$dex2oat_mode --instruction-set=$apk_abi --oat-file="$apk_dir"/oat/$apk_abi/base.odex
         ui_print "- ${app_list}: 成功"
       fi
     else
-      if [ $(unzip -l $apk_path | grep classes.dex) != "" ]; then
+      if [ "$(unzip -l $apk_path | grep classes.dex)" != "" ]; then
         mkdir -p $MODPATH$apk_dir/oat/$apk_abi
         dex2oat --dex-file="$apk_path" --compiler-filter=$dex2oat_mode --instruction-set=$apk_abi --oat-file=$MODPATH$apk_dir/oat/$apk_abi/$apk_name.odex
         ui_print "- ${app_list}: 成功"
@@ -124,11 +125,11 @@ dex2oat_app() {
 package_replace() {
   for app_list in ${Package_Name_Reduction}; do
     var=$app_list
-    record=$(eval cat $MODPATH/packages.log | grep "$var"$)
-    apk_path=${record%=*}
-    apk_dir=${apk_path%/*}
-    apk_name=${apk_path##*/}
-    apk_name=${apk_name%.*}
+    record="$(eval cat $MODPATH/packages.log | grep "$var"$)"
+    apk_path="${record%=*}"
+    apk_dir="${apk_path%/*}"
+    apk_name="${apk_path##*/}"
+    apk_name="${apk_name%.*}"
     if [[ "$apk_dir" == "/data"* ]]; then
       ui_print "- ${app_list} 为data应用,或是经过应用商店更新"
     else
@@ -163,9 +164,10 @@ hosts_file() {
 }
 remove_files() {
   for partition in vendor odm product system_ext; do
-    [ -f $MODPATH/$partition ] && mv $MODPATH/$partition $MODPATH/system
+    [ -d $MODPATH/$partition ] && mv $MODPATH/$partition $MODPATH/system
   done
   rm -rf $MODPATH/hosts.txt
+  rm -rf $MODPATH/.replace
 }
 reduce_test_services
 uninstall_useless_app
