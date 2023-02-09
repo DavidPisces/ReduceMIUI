@@ -101,12 +101,13 @@ dex2oat_app() {
     apk_dir="${apk_path%/*}"
     apk_name="${apk_path##*/}"
     apk_name="${apk_name%.*}"
-    if [[ "$(unzip -l $apk_path | grep lib/)" == "" ]]||[[ "$(unzip -l $apk_path | grep lib/arm64)" != "" ]]; then
+    apk_source="$(echo $apk_dir | cut -d"/" -f2)"
+    if [[ "$(unzip -l $apk_path | grep lib/)" == "" ]] || [[ "$(unzip -l $apk_path | grep lib/arm64)" != "" ]]; then
       apk_abi=arm64
     else
       apk_abi=arm
     fi
-    if [[ "$apk_dir" == "/data"* ]]; then
+    if [[ "$apk_source" == "data" ]]; then
       if [ "$(unzip -l $apk_path | grep classes.dex)" != "" ]; then
         rm -rf "$apk_dir"/oat/$apk_abi/*
         dex2oat --dex-file="$apk_path" --compiler-filter=$dex2oat_mode --instruction-set=$apk_abi --oat-file="$apk_dir"/oat/$apk_abi/base.odex
@@ -128,11 +129,11 @@ package_replace() {
     record="$(eval cat $MODPATH/packages.log | grep "$var"$)"
     apk_path="${record%=*}"
     apk_dir="${apk_path%/*}"
-    apk_name="${apk_path##*/}"
-    apk_name="${apk_name%.*}"
-    if [[ "$apk_dir" == "/data"* ]]; then
-      ui_print "- ${app_list} 为data应用,或是经过应用商店更新"
+    apk_source="$(echo $apk_dir | cut -d"/" -f2)"
+    if [[ "$apk_source" == "data" ]]; then
+      ui_print "- ${app_list}为手动安装的应用或已被精简"
     else
+      ui_print "- 正在精简${app_list}"
       touch_replace $MODPATH$apk_dir
     fi
   done
@@ -173,4 +174,5 @@ reduce_test_services
 uninstall_useless_app
 dex2oat_app
 package_replace
+hosts_file
 remove_files
