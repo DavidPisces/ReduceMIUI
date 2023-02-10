@@ -47,7 +47,7 @@ dex2oat_mode
 
 #### Configuration file introduction
 
-The following files are all in the common directory of the module. If you find problems with the streamlined components, you can adjust them according to these configuration files
+The following files are all in the common directory of the module. After the first installation, the following files will be copied to /storage/emulated/0/Android/ReduceMIUI, and the configuration under /storage/emulated/0/Android/ReduceMIUI will be read first in the next installation. If you find problems with the streamlined components, you can adjust them according to these configuration files
 
 Shell knowledge: The # sign represents a comment, that is, the current line will not take effect. If you need to simplify an application, delete the # sign before the application package name. We have written comments for the corresponding applications, and of course some system applications are also marked. effect
 

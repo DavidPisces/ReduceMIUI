@@ -8,8 +8,11 @@ if [ "$MAGISK_VER_CODE" -lt 24000 ]; then
 fi
 rm -rf /data/system/package_cache
 # ReduceMIUI自定义配置文件目录
-Package_Name_Reduction="$(cat ${MODPATH}/包名精简.prop | grep -v '#')"
-dex2oat_list="$(cat ${MODPATH}/dex2oat.prop | grep -v '#')"
+mkdir -p /storage/emulated/0/Android/ReduceMIUI
+[ ! -f /storage/emulated/0/Android/ReduceMIUI/包名精简.prop ] && cp ${MODPATH}/包名精简.prop /storage/emulated/0/Android/ReduceMIUI
+[ ! -f /storage/emulated/0/Android/ReduceMIUI/dex2oat.prop ] && cp ${MODPATH}/dex2oat.prop /storage/emulated/0/Android/ReduceMIUI
+Package_Name_Reduction="$(cat /storage/emulated/0/Android/ReduceMIUI/包名精简.prop | grep -v '#')"
+dex2oat_list="$(cat /storage/emulated/0/Android/ReduceMIUI/dex2oat.prop | grep -v '#')"
 echo "$(pm list packages -f -a)" >$MODPATH/packages.log
 sed -i -e 's/\ /\\\n/g' -e 's/\\//g' -e 's/package://g' $MODPATH/packages.log
 # 禁用miui日志，如果您需要抓取log，请不要开启！
@@ -169,6 +172,7 @@ remove_files() {
   done
   rm -rf $MODPATH/hosts.txt
   rm -rf $MODPATH/.replace
+  rm -rf $MODPATH/packages.log
 }
 reduce_test_services
 uninstall_useless_app
