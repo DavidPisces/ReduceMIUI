@@ -26,12 +26,14 @@ is_use_hosts=false
 dex2oat_mode="everything"
 # 获取系统SDK
 SDK="$(getprop ro.system.build.version.sdk)"
+
 touch_replace() {
   mkdir -p $1
   touch $1/.replace
   chown root:root $1/.replace
   chmod 0644 $1/.replace
 }
+
 reduce_test_services() {
   if [ "$is_reduce_test_services" == "true" ]; then
     if [ "$SDK" -le 30 ]; then
@@ -70,6 +72,7 @@ reduce_test_services() {
     rm -rf /data/vendor/charge_logger/*
   fi
 }
+
 uninstall_useless_app() {
   ui_print "- 正在禁用智能服务"
   if [ "$(pm list package | grep 'com.miui.systemAdSolution')" != "" ]; then
@@ -95,6 +98,7 @@ uninstall_useless_app() {
     ui_print "- Analytics不存在"
   fi
 }
+
 dex2oat_app() {
   ui_print "- 为保障流畅，执行dex2oat ($dex2oat_mode)优化，需要一点时间..."
   for app_list in ${dex2oat_list}; do
@@ -126,6 +130,7 @@ dex2oat_app() {
   done
   ui_print "- 优化完成"
 }
+
 package_replace() {
   for app_list in ${Package_Name_Reduction}; do
     var=$app_list
@@ -141,6 +146,7 @@ package_replace() {
     fi
   done
 }
+
 hosts_file() {
   # hosts文件判断
   if [[ $is_use_hosts == true ]]; then
@@ -166,6 +172,7 @@ hosts_file() {
     ui_print "- hosts文件未启用"
   fi
 }
+
 remove_files() {
   for partition in vendor odm product system_ext; do
     [ -d $MODPATH/$partition ] && mv $MODPATH/$partition $MODPATH/system
@@ -174,6 +181,7 @@ remove_files() {
   rm -rf $MODPATH/.replace
   rm -rf $MODPATH/packages.log
 }
+
 reduce_test_services
 uninstall_useless_app
 dex2oat_app
