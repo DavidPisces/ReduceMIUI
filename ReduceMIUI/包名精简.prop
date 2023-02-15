@@ -34,36 +34,47 @@
 # (!)警告:小米云服务相关，精简后无法云同步短信/通话记录/密码管家
 #com.xiaomi.simactivate.service
 
-# /system/*/MiGameCenterSDKService
 # 小米游戏服务 
 # [!] ps: 不建议精简，因为部分小米渠道服游戏是依赖小米账号登陆的
 # 如果精简自带的游戏服务，将无法登录小米渠道服游戏，需要自行安装
 #com.xiaomi.gamecenter.sdk.service
 
-# /system/priv-app/MusicFX
 # MusicFX(音频均衡器/控制器) [!] ps: 不建议精简
 #com.android.musicfx
 
-# /system/*/*/PerformanceMode
 # 性能模式，游戏玩家不建议精简
 #com.qualcomm.qti.performancemode
+
+# 连接到需要Web认证时跳的应用
+#com.android.captiveportallogin
 
 #====================================================
 
 # GMS 谷歌服务
 
-# Google 商店
+# Google Play 商店
 #com.android.vending
-# Google 服务
+
+# Google Play 服务
 #com.google.android.gms
+
 # Google 服务框架
 #com.google.android.gsf
-# Google 服务相关
+
+# Google 应用首次配置
 #com.google.android.onetimeinitializer
-# Google 通讯录
+
+# Android Shared Library
+#com.google.android.ext.shared
+
+# Google 通讯录同步
 #com.google.android.syncadapters.contacts
+
 # Google 通讯录备份
 #com.android.calllogbackup
+
+# Android 无障碍套件(talkback)
+#com.google.android.marvin.talkback
 
 #====================================================
 
@@ -83,13 +94,16 @@
 #====================================================
 # 按需精简列表
 
-# 小爱同学
+# 小爱语音
 #com.miui.voiceassist
 
 # 语音唤醒
 #com.miui.voicetrigger
 
-# AI虚拟助手
+# 小爱翻译
+#com.xiaomi.aiasst.vision
+
+# 小爱通话
 # 如果您不需要AI电话助理，可以精简
 #com.xiaomi.aiasst.service
 
@@ -120,10 +134,6 @@
 
 # 小米互传
 #com.miui.mishare.connectivity
-
-# NFC
-# NFC服务，建议使用NFC的不要精简
-#com.android.nfc
 
 # 小米智能卡
 # MiPay相关服务，禁用后可能导致无法正常刷卡
@@ -169,6 +179,40 @@
 
 # 智能助理
 #com.miui.personalassistant
+
+# 弹幕通知
+#com.xiaomi.barrage
+
+# 自动连招
+#com.xiaomi.macro
+
+# 米币支付
+# [!]ps: 需要使用的米币请勿精简
+#com.xiaomi.payment
+
+# 小爱建议
+#com.xiaomi.aireco
+
+# 小米视频
+#com.miui.video
+
+# CarWith
+#com.miui.carlink
+
+# 游戏高能时刻
+#com.xiaomi.migameservice
+
+# 时钟
+#com.android.deskclock
+
+# 下载管理          
+#com.android.providers.downloads.ui
+
+# 相册
+#com.miui.gallery
+
+# 日历
+#com.android.calendar
 
 #====================================================
 
@@ -243,9 +287,6 @@ com.android.providers.userdictionary
 # 照片屏幕保护程序
 com.android.dreams.phototable
 
-# Android 无障碍套件(talkback)
-com.google.android.marvin.talkback
-
 # 急救信息
 # 急救信息为原生组件，在MIUI上目前用不到
 com.android.emergency
@@ -258,7 +299,6 @@ com.qti.xdivert
 # Print Service Recommendation Service
 
 # ONS
-# /system/*/ONS ps: 盲猜模拟器之类
 com.android.ons
 
 # QDCM-FF 
@@ -268,3 +308,9 @@ com.qti.snapdragon.qdcm_ff
 # QColor 
 # 高通色彩测试相关
 com.qualcomm.qti.qcolor
+
+# 桌面莫奈取色小组件
+com.android.egg
+
+# 高通语音助手
+com.quicinc.voice.activation

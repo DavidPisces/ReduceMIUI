@@ -1,0 +1,64 @@
+name: release
+on:
+  push:
+    paths:
+      - "ReduceMIUI.json"
+  workflow_dispatch:
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: 1. 准备文件
+        run: |
+          echo "version=$(jq .version $GITHUB_WORKSPACE/ReduceMIUI.json)" >> $GITHUB_ENV
+          echo "versionCode=$(jq .versionCode $GITHUB_WORKSPACE/ReduceMIUI.json)" >> $GITHUB_ENV
+          echo "ModuleFolderName=ReduceMIUI" >> $GITHUB_ENV
+      - name: 2. 制作模块
+        run: |
+          echo "version=${{ env.version }}" >>$GITHUB_WORKSPACE/${{ env.ModuleFolderName }}/module.prop
+          echo "versionCode=${{ env.versionCode }}" >>$GITHUB_WORKSPACE/${{ env.ModuleFolderName }}/module.prop
+          cd $GITHUB_WORKSPACE/${{ env.ModuleFolderName }}
+          zip -q -r ${{ env.ModuleFolderName }}.zip *
+          mv $GITHUB_WORKSPACE/${{ env.ModuleFolderName }}/${{ env.ModuleFolderName }}.zip $GITHUB_WORKSPACE/${{ env.ModuleFolderName }}.zip
+      - name: 3. 创建GitHub Release
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.version }}
+          release_name: RedceMIUI ${{ env.version }}
+          draft: false
+          prerelease: false
+      - name: 4. 上传GitHub Release
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./${{ env.ModuleFolderName }}.zip
+          asset_name: ${{ env.ModuleFolderName }}.zip
+          asset_content_type: application/zip
+      - name: 5. 再次初始化仓库
+        run: |
+          rm -rf $GITHUB_WORKSPACE/*
+      - uses: actions/checkout@v2
+      - name: 6. 更新下载链接
+        env:
+          browser_download_url: ${{ steps.upload-release-asset.outputs.browser_download_url }}
+        run: |
+          git config --global user.email "42595464+DavidPisces@users.noreply.github.com "
+          git config --global user.name "泠洛"
+          sed -i '4d' $GITHUB_WORKSPACE/ReduceMIUI.json
+          sed -i '3a "zipUrl": "https://ghproxy.com/'"$browser_download_url"'",' $GITHUB_WORKSPACE/ReduceMIUI.json
+          jq . $GITHUB_WORKSPACE/ReduceMIUI.json > $GITHUB_WORKSPACE/new.json
+          rm -rf $GITHUB_WORKSPACE/ReduceMIUI.json && mv $GITHUB_WORKSPACE/new.json $GITHUB_WORKSPACE/ReduceMIUI.json
+          git add ./ReduceMIUI.json
+          git commit -m "v${{ env.version }}" -a
+      - name: 7. 推送到Magisk Module仓库
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}

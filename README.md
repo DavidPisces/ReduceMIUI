@@ -10,9 +10,7 @@
 
 [English version README](https://github.com/DavidPisces/ReduceMIUI/blob/master/README_en.md)
 
-注意：目前本仓库最新模块已经由ReduceMIUI-Canary仓库的Github Action自动打包，本仓库的Release只保留2.82及其以前的旧版，如果您想下载新的版本，请点击下方链接跳转到ReduceMIUI-Canary仓库的Release页面
-
-### **下载地址(ReduceMIUI-Canary)** ：[Release](https://github.com/DavidPisces/ReduceMIUI-Canary/releases/tag/latest)
+### **下载地址** ：[Release](https://github.com/DavidPisces/ReduceMIUI/releases)
 
 --------
 
@@ -29,66 +27,34 @@
 - 使用hosts屏蔽Analytics发送数据的部分域名
 
 
-**以下是模块的参数调整和注意事项**
+**以下是模块的参数设置**
 
-#### 注意事项
-  
-* 模块的主要调整参数在install.sh,修改install.sh的各种参数即可，module.prop由install.sh自动生成
-
-
-
-#### 参数设置
-
-以下参数均在install.sh
-```shell
-module_id
-# 模块的id，可自定义
-
-module_name
-# 模块的名称，在Magisk内显示的名称
-
-module_author
-# 模块的作者
-
-module_minMagisk
-# 模块所需要的最小Magisk版本
-
-module_description
-# 模块在Magisk页面的描述
-
-version
-# 模块版本号，相当于module.prop的version变量
-
-update_date
-# 模块更新日期，会自动加入模块描述
-```
-
-
-* 在以下参数中true为开启，false为关闭
+- **以下参数均在customize.sh，true为开启，false为关闭**
 ```shell
 is_clean_logs
-
 #启用移除MIUI日志
 
 is_use_hosts
-
 #使用hosts文件屏蔽Analytics域名，如果您有使用屏蔽广告类模块，请将其设置为false，如果您使用该功能，可能导致小米主题之类的服务无法加载预览图
+
+is_reduce_test_services
+# 禁用非必要调试服务！
+```
+- **以下参数也在customize.sh，值为speed或者everything**
+```shell
+dex2oat_mode
+# 默认dex2oat优化编译模式
 ```
 
 #### 配置文件介绍：
 
-以下文件均在模块的common目录，如果您发现精简部分组件出现问题，可以根据这些配置文件进行调整
+以下文件均在模块的根目录，首次安装后会将以下文件复制到/storage/emulated/0/Android/ReduceMIUI下，下次安装将优先读取/storage/emulated/0/Android/ReduceMIUI下的配置。如果您发现精简部分组件出现问题，可以根据这些配置文件进行调整
 
 shell知识：**#号代表注释，即当前行不会生效**，如果您需要精简某一应用，删除该应用包名前的#号即可，相应的应用我们都有写注释，当然一部分系统应用也标注了作用
 
 - 包名精简.prop
 
   这里包含最基本的精简列表，可以根据包名自动查找目录并精简系统应用，对于给出的列表，删掉#保存刷入生效，未给出的系统应用，您可以自行另起一行加上该应用包名，保存后刷入生效
-
-
-- 兼容精简.prop
-
-  这里包含部分旧版MIUI的应用，如果您使用旧版MIUI或者是包名精简未起作用，请在此文件内另起一行加入该系统应用的具体路径
 
 
 - dex2oat.prop
