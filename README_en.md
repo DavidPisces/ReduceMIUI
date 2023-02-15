@@ -1,6 +1,6 @@
 # Reduce MIUI Project
 
-![](https://img.shields.io/github/license/zjw2017/ReduceMIUI)
+![](https://img.shields.io/github/license/zjw2017/Reducemiui)
 
 #### This is a Magisk module for the domestic version of MIUI  
 

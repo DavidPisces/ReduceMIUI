@@ -1,6 +1,6 @@
 # Reduce MIUI Project
 
-![](https://img.shields.io/github/license/zjw2017/ReduceMIUI)
+![](https://img.shields.io/github/license/zjw2017/Reducemiui)
 
 这是一个Magisk模块，适用于国内版MIUI  
 
