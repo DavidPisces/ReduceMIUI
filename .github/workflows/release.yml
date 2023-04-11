@@ -29,7 +29,7 @@ jobs:
         uses: ncipollo/release-action@main
         with:
           artifacts: ${{ github.workspace }}/GithubRelease/*
-          name: "${{ env.ModuleFolderName }}_${{ env.version }}"
+          name: "${{ env.ModuleFolderName }} ${{ env.version }}"
           tag: "${{ env.version }}"
           bodyFile: "${{ github.workspace }}/file.log"
           allowUpdates: true
