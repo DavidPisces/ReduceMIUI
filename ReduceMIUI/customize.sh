@@ -68,15 +68,18 @@ reduce_test_services() {
     fi
     ui_print "- 正在清除MIUI WiFi log"
     rm -rf /data/vendor/wlan_logs/*
+    echo "rm -rf /data/vendor/wlan_logs/*" >>$MODPATH/service.sh
     ui_print "- 正在清除MIUI 充电 log"
     rm -rf /data/vendor/charge_logger/*
+    echo "rm -rf /data/vendor/charge_logger/*" >>$MODPATH/service.sh
   fi
 }
 
 uninstall_useless_app() {
   ui_print "- 正在禁用智能服务"
   if [ "$(pm list package | grep 'com.miui.systemAdSolution')" != "" ]; then
-    pm disable com.miui.systemAdSolution
+    pm disable com.miui.systemAdSolution >/dev/null
+    echo "pm disable com.miui.systemAdSolution" >>$MODPATH/service.sh
     ui_print "- 成功禁用智能服务"
   else
     ui_print "- 智能服务不存在或已被精简"
@@ -87,6 +90,7 @@ uninstall_useless_app() {
     chown -R root:root /data/user/0/com.xiaomi.market/app_analytics/
     chmod -R 000 /data/user/0/com.xiaomi.market/app_analytics/
     pm uninstall --user 0 com.miui.analytics >/dev/null
+    echo "pm uninstall --user 0 com.miui.analytics >/dev/null" >>$MODPATH/service.sh
     if [ -d "/data/user/999/com.xiaomi.market/app_analytics/" ]; then
       rm -rf /data/user/999/com.xiaomi.market/app_analytics/*
       chown -R root:root /data/user/999/com.xiaomi.market/app_analytics/
