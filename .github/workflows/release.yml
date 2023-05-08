@@ -49,9 +49,13 @@ jobs:
           jq . $GITHUB_WORKSPACE/ReduceMIUI.json > $GITHUB_WORKSPACE/new.json
           rm -rf $GITHUB_WORKSPACE/ReduceMIUI.json && mv $GITHUB_WORKSPACE/new.json $GITHUB_WORKSPACE/ReduceMIUI.json
           git add ./ReduceMIUI.json
-          git commit -m "v${{ env.version }}" -a
-      - name: 6. 推送到Magisk Module仓库
+          if git commit -m "v${{ env.version }}"; then
+              echo "push=true" >> $GITHUB_ENV
+          else
+              echo "push=false" >> $GITHUB_ENV
+          fi
+      - if: ${{ env.push == 'true' }}
+        name: 6. 推送到Magisk Module仓库
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
