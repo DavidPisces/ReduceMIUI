@@ -1,0 +1,7 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+*.txt text eol=lf
+*.sh text eol=lf
+*.prop text eol=lf
+ReduceMIUI/META-INF/com/google/android/update-binary text eol=lf
+ReduceMIUI/META-INF/com/google/android/update-script text eol=lf
